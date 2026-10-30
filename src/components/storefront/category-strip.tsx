@@ -9,7 +9,7 @@ export function CategoryStrip({ storeSlug, categories }: { storeSlug: string; ca
   return (
     <nav aria-label="Categorias" className="py-4">
       <Container>
-        <ul className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2">
+        <ul className="-mx-4 flex snap-x scroll-pl-4 gap-4 overflow-x-auto px-4 pb-2">
           {categories.map((category) => (
             <li key={category.slug} className="snap-start">
               <Link

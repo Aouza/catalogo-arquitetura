@@ -28,7 +28,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
             store.name
           )}
         </Link>
-        <nav aria-label="Menu principal" className={categories.length > 0 ? "hidden lg:block" : "hidden"}>
+        <nav aria-label="Menu principal" className={categories.length > 0 ? "hidden lg:ml-4 lg:block" : "hidden"}>
           <ul className="flex gap-6">
             {categories.map((category) => (
               <li key={category.slug}>
