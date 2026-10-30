@@ -16,6 +16,7 @@
 | OQ-12 | Quais dados de contato e identidade serão públicos? | Privacidade | Apenas os escolhidos pelo lojista |
 | OQ-13 | Formato e limites de imagens? | Custos | Proposta 10 fotos / 5 MB |
 | OQ-14 | Variações podem ter SKU/código interno? | Cadastro/importação | Campo opcional futuro |
+| OQ-15 | Estrutura de URLs: subdomínio por loja e `/p/slug-id` (guia de design) ou `/{catalogSlug}/produto/{productSlug}` (arquitetura)? | Rotas, SEO, multi-loja | Decidir antes das rotas de produto; links centralizados em `lib/routes.ts` |
 
 ## Processo
 Resolver itens de impacto estrutural antes das migrations relevantes. Registrar novas decisões em ADR quando alterarem arquitetura ou domínio.

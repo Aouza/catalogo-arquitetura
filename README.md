@@ -25,6 +25,7 @@ Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calç
 11. [Critérios de qualidade](docs/delivery/QUALITY_AND_TESTING.md)
 12. [Pendências](docs/delivery/OPEN_QUESTIONS.md)
 13. [Setup do ambiente](docs/delivery/SETUP.md)
+14. [Guia de design](docs/design/Guia_Design_Catalogo_v1_2.docx) e [referência visual](docs/design/approved-composite-v2.png)
 
 ## Agentes de código
 - [AGENTS.md](AGENTS.md): instruções comuns para agentes, incluindo Codex.

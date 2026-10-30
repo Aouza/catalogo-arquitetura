@@ -4,8 +4,9 @@
 1. `docs/product/PRD.md` e `docs/product/SCOPE_AND_JOURNEYS.md` (objetivos e escopo).
 2. `docs/domain/BUSINESS_RULES.md` e `docs/domain/DOMAIN_MODEL.md` (comportamento e invariantes).
 3. `docs/architecture/adr/` (decisões aceitas).
-4. Demais documentos de arquitetura e implementação.
-5. Código e testes existentes (verificar divergências; não presumir que código antigo prevalece).
+4. `docs/design/Guia_Design_Catalogo_v1_2.docx` (UI/UX e tokens; a imagem `approved-composite-v2.png` é inspiracional, vale o texto do guia).
+5. Demais documentos de arquitetura e implementação.
+6. Código e testes existentes (verificar divergências; não presumir que código antigo prevalece).
 
 ## Regras de trabalho
 - Não implementar checkout, carrinho, pagamentos, reserva ou estoque quantitativo.
