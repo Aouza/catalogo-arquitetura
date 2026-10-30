@@ -19,4 +19,10 @@ describe("instagramUrl", () => {
     expect(instagramUrl("@loja.exemplo")).toBe("https://instagram.com/loja.exemplo");
     expect(instagramUrl(" loja.exemplo ")).toBe("https://instagram.com/loja.exemplo");
   });
+  it.each(["@@x", "a/b?x=1", "../x", "https://instagram.com/foo", "@", "   ", "", "a".repeat(31), "com espaço"])(
+    "retorna null para handle inválido %#",
+    (v) => {
+      expect(instagramUrl(v)).toBeNull();
+    },
+  );
 });

@@ -5,6 +5,9 @@ export function whatsappLink(value?: string | null): string | null {
   return `https://wa.me/${value.replace("+", "")}`;
 }
 
-export function instagramUrl(handle: string): string {
-  return `https://instagram.com/${handle.trim().replace(/^@/, "")}`;
+const INSTAGRAM_HANDLE = /^[A-Za-z0-9._]{1,30}$/;
+
+export function instagramUrl(handle: string): string | null {
+  const name = handle.trim().replace(/^@/, "");
+  return INSTAGRAM_HANDLE.test(name) ? `https://instagram.com/${name}` : null;
 }

@@ -20,7 +20,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
         )}
         <Link
           href={routes.catalog(store.slug)}
-          className="flex-1 text-center font-heading text-h2 font-bold text-fg lg:flex-none lg:text-left"
+          className="flex min-h-11 flex-1 items-center justify-center font-heading text-h2 font-bold text-fg lg:flex-none lg:justify-start"
         >
           {store.logoUrl ? (
             <Image src={store.logoUrl} alt={store.name} width={120} height={32} className="mx-auto h-8 w-auto lg:mx-0" />
@@ -32,7 +32,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
           <ul className="flex gap-6">
             {categories.map((category) => (
               <li key={category.slug}>
-                <Link href={routes.category(store.slug, category.slug)} className="text-label font-medium text-fg">
+                <Link href={routes.category(store.slug, category.slug)} className="inline-flex min-h-11 items-center text-label font-medium text-fg">
                   {category.name}
                 </Link>
               </li>

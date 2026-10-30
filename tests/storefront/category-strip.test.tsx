@@ -12,6 +12,18 @@ describe("CategoryStrip", () => {
     expect(html).toContain(">B<");
     expect(html).toContain('aria-label="Categorias"');
   });
+  it("esconde a inicial dos leitores de tela", () => {
+    const html = renderToStaticMarkup(
+      <CategoryStrip storeSlug="loja" categories={[{ slug: "bebes", name: "Bebês" }]} />,
+    );
+    expect(html).toMatch(new RegExp('<span[^>]*aria-hidden="true"[^>]*>B</span>'));
+  });
+  it("não divide emoji ou par substituto na inicial", () => {
+    const html = renderToStaticMarkup(
+      <CategoryStrip storeSlug="loja" categories={[{ slug: "x", name: "🙂Bebê" }]} />,
+    );
+    expect(html).toContain(">🙂<");
+  });
   it("não renderiza nada sem categorias", () => {
     expect(renderToStaticMarkup(<CategoryStrip storeSlug="loja" categories={[]} />)).toBe("");
   });

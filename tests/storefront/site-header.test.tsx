@@ -34,4 +34,9 @@ describe("SiteHeader", () => {
     expect(html).toContain('aria-label="Abrir menu de categorias"');
     expect(html).toContain('href="/loja/categoria/bebes"');
   });
+  it("alvos de toque do logo e dos links de categoria têm pelo menos 44px", () => {
+    const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
+    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/loja")(?=[^>]*min-h-11)[^>]*>'));
+    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/loja/categoria/bebes")(?=[^>]*min-h-11)[^>]*>Bebês</a></li></ul></nav>'));
+  });
 });

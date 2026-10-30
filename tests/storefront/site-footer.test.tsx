@@ -26,6 +26,9 @@ describe("SiteFooter", () => {
     expect(html).toContain('href="https://instagram.com/lojaexemplo"');
     expect(html).not.toContain("@@");
   });
+  it.each(["@", "a/b?x=1", "https://instagram.com/foo"])("não renderiza link do Instagram para handle inválido %s", (v) => {
+    expect(renderToStaticMarkup(<SiteFooter store={{ ...store, instagram: v }} />)).not.toContain("instagram.com");
+  });
   it("ignora WhatsApp inválido", () => {
     expect(renderToStaticMarkup(<SiteFooter store={{ ...store, whatsappE164: "abc" }} />)).not.toContain("wa.me");
   });

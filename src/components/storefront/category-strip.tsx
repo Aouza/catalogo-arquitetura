@@ -20,7 +20,7 @@ export function CategoryStrip({ storeSlug, categories }: { storeSlug: string; ca
                   {category.imageUrl ? (
                     <Image src={category.imageUrl} alt="" fill sizes="64px" className="object-cover" />
                   ) : (
-                    category.name.charAt(0)
+                    <span aria-hidden="true">{Array.from(category.name)[0]}</span>
                   )}
                 </span>
                 <span className="text-label font-medium text-fg">{category.name}</span>
