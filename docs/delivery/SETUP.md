@@ -33,3 +33,6 @@ Copie `API URL` e `anon key` para `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPA
 
 ## CI
 `.github/workflows/ci.yml` executa `typecheck`, `lint` e `test` em cada push na `master` e em pull requests. Antes de abrir PR, rode os três localmente.
+
+## Catálogo fictício
+Em desenvolvimento, `http://localhost:3000/demo-infantil` mostra um catálogo de exemplo (`src/modules/catalogs/fixtures/demo-catalog.ts`). Em produção a fixture não responde. A home usa `NEXT_PUBLIC_SITE_URL` como base dos metadados Open Graph.

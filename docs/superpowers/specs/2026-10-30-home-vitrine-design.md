@@ -19,7 +19,7 @@ Entregar a página inicial pública de um catálogo, `/{catalogSlug}`, para visi
 ```
 src/
   app/[catalogSlug]/
-    layout.tsx   page.tsx   loading.tsx   error.tsx   not-found.tsx
+    page.tsx   error.tsx   not-found.tsx   # sem layout.tsx e sem loading.tsx (ver "Rota e Cache Components")
   components/
     ui/          # Button, Chip, Container, Skeleton, ícones (sem conhecimento de domínio)
     storefront/  # SiteHeader, CategoryDrawer(client), SearchField, Hero, CategoryStrip,
@@ -51,6 +51,13 @@ Regras de fronteira:
 Preços em centavos, inteiros. `isAvailable` é derivado de existir ao menos uma variação disponível (BR-023, BR-027). A fixture só responde fora de produção (`NODE_ENV !== "production"`); em produção, sem Supabase, nenhum catálogo existe.
 
 Leitura pública com seleção explícita de campos e apenas produtos `published` (BR-011); a fixture contém também um produto `draft`, que `getCatalogHome` deve excluir, para testar a regra desde já.
+
+### Rota e Cache Components
+
+`cacheComponents` e `partialPrefetching` estão ativos. `params` de segmento dinâmico é dado de runtime: só pode ser lido dentro de `<Suspense>`, e `generateStaticParams` não pode retornar lista vazia (em produção a fixture está desligada, então não há slugs para listar). Por isso:
+- `page.tsx` é síncrona e renderiza `<Suspense fallback={<HomeSkeleton />}>` em volta de um componente async que lê `params`, chama `getCatalogHome` e renderiza `CatalogHome` (que contém o `ThemeScope`). Não há `layout.tsx` async; o skeleton é o fallback do Suspense.
+- `generateMetadata` lê `params` e chama `getCatalogHome` (metadados dinâmicos em stream; bots recebem render completo).
+- Slug inexistente chama `notFound()` depois do início do stream: a UI de 404 é exibida com `noindex`, mas o status HTTP permanece `200` (limitação documentada do Next com Cache Components). Os testes verificam o `null` de `getCatalogHome` e a UI de 404, não o status.
 
 ### Rotas
 
@@ -104,7 +111,7 @@ Imagens com `next/image`, dimensões reservadas, lazy loading abaixo da primeira
 
 ## 5. Estados, acessibilidade e metadados
 
-- `loading.tsx`: esqueleto da home. `error.tsx`: "Não conseguimos carregar esta página." com "Tentar novamente". `not-found.tsx`: 404 genérico.
+- Esqueleto da home como fallback do Suspense. `error.tsx`: "Não conseguimos carregar esta página." com "Tentar novamente". `not-found.tsx`: 404 genérico.
 - Ausências opcionais: sem hero, categorias sobem sem lacuna; sem imagem, placeholder; sem WhatsApp, atalho some; sem categorias, a faixa some; sem produtos, `EmptyState`.
 - Landmarks `header`/`main`/`footer`, link "pular para o conteúdo", um `h1` por página, alt descrevendo peça e cor (não a criança), tudo operável por teclado, alvos ≥ 44 px, conteúdo utilizável a 200% de zoom.
 - `generateMetadata`: título, descrição e Open Graph (logo, quando existir) com o nome da loja; `robots` coerente com catálogo existente.
@@ -122,7 +129,7 @@ Imagens com `next/image`, dimensões reservadas, lazy loading abaixo da primeira
 
 ## 7. Critérios de aceite
 
-- `/{slug}` de catálogo fictício renderiza todas as seções do item 4 com tema aplicado; slug inexistente ou reservado dá 404.
+- `/{slug}` de catálogo fictício renderiza todas as seções do item 4 com tema aplicado; slug inexistente ou reservado exibe a UI de 404 com `noindex` (status HTTP 200 por causa do stream).
 - Duas colunas legíveis a 320 px, preços visíveis, imagens 4:5, sem overflow horizontal.
 - Nenhuma cor hexadecimal em componentes; paleta padrão passa em `validateTheme`.
 - Nenhum recurso de e-commerce, favoritos ou conta de usuário final.

@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
+/* Tokens padrão do guia v1.2. Cada catálogo sobrescreve --theme-* no ThemeScope. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --theme-bg: #FAF8F4;
+  --theme-surface: #FFFFFF;
+  --theme-surface-subtle: #EEF1EC;
+  --theme-fg: #292D2A;
+  --theme-fg-muted: #6B6F6B;
+  --theme-action: #5E7462;
+  --theme-action-hover: #4F6353;
+  --theme-brand: #718775;
+  --theme-accent: #C98470;
+  --theme-accent-strong: #9E5643;
+  --theme-border: #E8E4DC;
+  --theme-border-strong: #8C8880;
+  --theme-font-heading: var(--font-dm-sans);
+  --theme-font-body: var(--font-inter);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: var(--theme-bg);
+  --color-surface: var(--theme-surface);
+  --color-surface-subtle: var(--theme-surface-subtle);
+  --color-fg: var(--theme-fg);
+  --color-fg-muted: var(--theme-fg-muted);
+  --color-action: var(--theme-action);
+  --color-action-hover: var(--theme-action-hover);
+  --color-brand: var(--theme-brand);
+  --color-accent: var(--theme-accent);
+  --color-accent-strong: var(--theme-accent-strong);
+  --color-border: var(--theme-border);
+  --color-border-strong: var(--theme-border-strong);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-heading: var(--theme-font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--theme-font-body), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-hero: 18px;
+
+  --text-display: 32px;
+  --text-display--line-height: 38px;
+  --text-h1: 24px;
+  --text-h1--line-height: 30px;
+  --text-h2: 18px;
+  --text-h2--line-height: 24px;
+  --text-price: 18px;
+  --text-price--line-height: 24px;
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+  --text-label: 14px;
+  --text-label--line-height: 20px;
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--theme-bg);
+  color: var(--theme-fg);
+  font-family: var(--theme-font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--theme-action);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
