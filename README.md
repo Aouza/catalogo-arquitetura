@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catálogo Digital — documentação do projeto
 
-## Getting Started
+**Status:** planejamento / pré-implementação · **Versão:** 0.1 · **Data:** 2026-10-23
 
-First, run the development server:
+Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calçados infantis. A arquitetura prevê um segundo catálogo de brechó, sem desenvolver funcionalidades comerciais de SaaS no MVP.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Princípios
+- Catálogo, não e-commerce: não processar pedidos, pagamentos ou reservas.
+- Mobile-first; conversão via link do WhatsApp com produto e seleção identificados.
+- Cadastro manual inicialmente; importação CSV/XLSX futura.
+- Monólito modular, com isolamento de dados entre catálogos.
+- Evitar abstrações prematuras; preservar regras de negócio independentes da UI.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Mapa de leitura
+1. [PRD](docs/product/PRD.md)
+2. [Escopo e jornadas](docs/product/SCOPE_AND_JOURNEYS.md)
+3. [Regras de negócio](docs/domain/BUSINESS_RULES.md)
+4. [Modelo de domínio](docs/domain/DOMAIN_MODEL.md)
+5. [Arquitetura](docs/architecture/SYSTEM_ARCHITECTURE.md)
+6. [Banco de dados](docs/architecture/DATABASE_DESIGN.md)
+7. [Segurança](docs/architecture/SECURITY.md)
+8. [Imagens e SEO](docs/architecture/MEDIA_AND_SEO.md)
+9. [ADRs](docs/architecture/adr/)
+10. [Plano de entrega](docs/delivery/IMPLEMENTATION_PLAN.md)
+11. [Critérios de qualidade](docs/delivery/QUALITY_AND_TESTING.md)
+12. [Pendências](docs/delivery/OPEN_QUESTIONS.md)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Agentes de código
+- [AGENTS.md](AGENTS.md): instruções comuns para agentes, incluindo Codex.
+- [CLAUDE.md](CLAUDE.md): instruções de entrada para Claude Code.
+- Antes de codificar: ler PRD, regras de negócio, ADRs e documento da tarefa.
+- Não inventar requisitos; registrar lacunas em OPEN_QUESTIONS.md.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estado das decisões
+**Confirmado pelo solicitante:** uso inicial para o tio; aproximadamente 100 produtos; cadastro manual; cores/tamanhos; disponibilidade sem quantidade; preço base com sobrescrita; fotos por cor; WhatsApp; divulgação por Instagram/WhatsApp; segundo catálogo potencial para brechó.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Proposta técnica adotada como baseline, sujeita a validação:** multi-catálogo na mesma aplicação, Next.js, Supabase, variações com opções configuráveis, RLS, URLs por slug.
