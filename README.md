@@ -24,6 +24,7 @@ Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calç
 10. [Plano de entrega](docs/delivery/IMPLEMENTATION_PLAN.md)
 11. [Critérios de qualidade](docs/delivery/QUALITY_AND_TESTING.md)
 12. [Pendências](docs/delivery/OPEN_QUESTIONS.md)
+13. [Setup do ambiente](docs/delivery/SETUP.md)
 
 ## Agentes de código
 - [AGENTS.md](AGENTS.md): instruções comuns para agentes, incluindo Codex.
