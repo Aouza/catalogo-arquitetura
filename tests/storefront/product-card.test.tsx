@@ -11,12 +11,12 @@ const base: ProductView = {
   isAvailable: true,
 };
 const render = (p: Partial<ProductView> = {}) =>
-  renderToStaticMarkup(<ul><ProductCard storeSlug="loja" product={{ ...base, ...p }} /></ul>);
+  renderToStaticMarkup(<ul><ProductCard product={{ ...base, ...p }} /></ul>);
 
 describe("ProductCard", () => {
   it("é um link para o produto com nome e preço", () => {
     const html = render();
-    expect(html).toContain('href="/loja/produto/vestido-floral"');
+    expect(html).toContain('href="/produto/vestido-floral"');
     expect(html).toContain("Vestido Floral");
     expect(html).toContain("R$ 149,90");
   });

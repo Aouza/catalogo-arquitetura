@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { SiteFooter } from "@/components/storefront/site-footer";
 
-const store = { slug: "loja", name: "Loja Exemplo", description: "Desc" };
+const store = { name: "Loja Exemplo", description: "Desc" };
 
 describe("SiteFooter", () => {
   it("mostra só o nome quando nada mais está configurado", () => {

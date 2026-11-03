@@ -1,5 +1,7 @@
 # Home da vitrine (`/{catalogSlug}`) — design
 
+> **Atualização (2026-11-03):** a rota deixou de usar `/{catalogSlug}` e passou para a raiz `/`, sem slug de catálogo (ver ADR-004). O restante deste documento é histórico.
+
 **Status:** aprovado em conversa (seções 1–3), aguardando revisão desta spec · **Data:** 2026-10-30
 
 ## 1. Objetivo e escopo

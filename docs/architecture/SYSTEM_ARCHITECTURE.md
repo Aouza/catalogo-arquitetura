@@ -28,10 +28,10 @@ Visitante --link contextual--> WhatsApp externo
 - SEO básico e metadados Open Graph para links compartilhados.
 
 ## URLs propostas
-`/{catalogSlug}`; `/{catalogSlug}/produto/{productSlug}`; `/admin` (autenticado). Reservar slugs como `admin`, `api`, `_next`. Confirmar estratégia antes de implementar rotas.
+`/`; `/produtos`; `/busca`; `/categoria/{categorySlug}`; `/produto/{productSlug}`; `/admin` (autenticado). Loja única, sem slug de catálogo (ADR-004). Reservar `admin` e `api` como rotas da aplicação.
 
 ## Não objetivos
 Microsserviços, event bus, filas, Redis, gateway de pagamentos e CMS genérico.
 
 ## Evolução
-Segundo catálogo na mesma base; eventual SaaS exigirá billing, provisionamento self-service, limites, suporte, auditoria e políticas operacionais adicionais.
+Segundo catálogo (fora do MVP, ver ADR-004) exigirá introduzir tenant; eventual SaaS exigirá billing, provisionamento self-service, limites, suporte, auditoria e políticas operacionais adicionais.

@@ -5,9 +5,9 @@ import { routes } from "@/lib/routes";
 import type { ProductView } from "@/modules/catalogs/types";
 import { ProductCard } from "./product-card";
 
-type Props = { storeSlug: string; products: ProductView[]; order: "published_at" | "default" };
+type Props = { products: ProductView[]; order: "published_at" | "default" };
 
-export function ProductGrid({ storeSlug, products, order }: Props) {
+export function ProductGrid({ products, order }: Props) {
   return (
     <section aria-labelledby="products-title" className="py-6">
       <Container>
@@ -16,7 +16,7 @@ export function ProductGrid({ storeSlug, products, order }: Props) {
             {order === "published_at" ? "Novidades" : "Produtos"}
           </h2>
           <Link
-            href={routes.products(storeSlug)}
+            href={routes.products()}
             className="inline-flex min-h-11 items-center gap-1 text-label font-medium text-action"
           >
             Ver todos <ArrowRightIcon className="size-4" />
@@ -24,7 +24,7 @@ export function ProductGrid({ storeSlug, products, order }: Props) {
         </div>
         <ul className="grid grid-cols-2 gap-3 min-[600px]:grid-cols-3 lg:grid-cols-4 lg:gap-4">
           {products.map((product, index) => (
-            <ProductCard key={product.slug} storeSlug={storeSlug} product={product} priority={index < 2} />
+            <ProductCard key={product.slug} product={product} priority={index < 2} />
           ))}
         </ul>
       </Container>

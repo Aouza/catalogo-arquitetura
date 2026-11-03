@@ -2,7 +2,7 @@
 
 **Status:** planejamento / pré-implementação · **Versão:** 0.1 · **Data:** 2026-10-23
 
-Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calçados infantis. A arquitetura prevê um segundo catálogo de brechó, sem desenvolver funcionalidades comerciais de SaaS no MVP.
+Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calçados infantis. O foco é um único catálogo (ADR-004); segundo catálogo e SaaS ficam fora do MVP, sem desenvolver funcionalidades comerciais de SaaS no MVP.
 
 ## Princípios
 - Catálogo, não e-commerce: não processar pedidos, pagamentos ou reservas.
@@ -36,4 +36,4 @@ Plataforma de vitrines digitais, inicialmente para um vendedor de roupas e calç
 ## Estado das decisões
 **Confirmado pelo solicitante:** uso inicial para o tio; aproximadamente 100 produtos; cadastro manual; cores/tamanhos; disponibilidade sem quantidade; preço base com sobrescrita; fotos por cor; WhatsApp; divulgação por Instagram/WhatsApp; segundo catálogo potencial para brechó.
 
-**Proposta técnica adotada como baseline, sujeita a validação:** multi-catálogo na mesma aplicação, Next.js, Supabase, variações com opções configuráveis, RLS, URLs por slug.
+**Proposta técnica adotada como baseline, sujeita a validação:** loja única (ADR-004), Next.js, Supabase, variações com opções configuráveis, RLS, catálogo na raiz.

@@ -6,7 +6,7 @@ import { defaultTheme } from "@/modules/catalogs/theme/tokens";
 import type { CatalogHomeView } from "@/modules/catalogs/types";
 
 const minimal: CatalogHomeView = {
-  store: { slug: "vazia", name: "Loja Vazia", description: "x" },
+  store: { name: "Loja Vazia", description: "x" },
   theme: defaultTheme,
   categories: [],
   productsOrder: "default",
@@ -15,7 +15,7 @@ const minimal: CatalogHomeView = {
 
 describe("CatalogHome", () => {
   it("renderiza a vitrine completa do catálogo fictício", async () => {
-    const home = (await getCatalogHome("demo-infantil"))!;
+    const home = (await getCatalogHome())!;
     const html = renderToStaticMarkup(<CatalogHome home={home} />);
     expect(html).toContain("--theme-action:#5E7462");
     expect(html).toContain('id="conteudo"');
@@ -48,7 +48,7 @@ describe("CatalogHome", () => {
     expect(html).not.toContain("Novidades chegando");
   });
   it("não introduz funcionalidades de e-commerce", async () => {
-    const home = (await getCatalogHome("demo-infantil"))!;
+    const home = (await getCatalogHome())!;
     expect(renderToStaticMarkup(<CatalogHome home={home} />).toLowerCase()).not.toMatch(
       /carrinho|favorit|comprar|checkout|frete/,
     );

@@ -6,7 +6,7 @@ import { CloseIcon, MenuIcon } from "@/components/ui/icons";
 import { routes } from "@/lib/routes";
 import type { CategoryView } from "@/modules/catalogs/types";
 
-export function CategoryDrawer({ storeSlug, categories }: { storeSlug: string; categories: CategoryView[] }) {
+export function CategoryDrawer({ categories }: { categories: CategoryView[] }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const close = () => dialogRef.current?.close();
 
@@ -39,7 +39,7 @@ export function CategoryDrawer({ storeSlug, categories }: { storeSlug: string; c
           {categories.map((category) => (
             <li key={category.slug}>
               <Link
-                href={routes.category(storeSlug, category.slug)}
+                href={routes.category(category.slug)}
                 onClick={close}
                 className="block px-4 py-3 text-body text-fg"
               >

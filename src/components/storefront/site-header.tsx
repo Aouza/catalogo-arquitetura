@@ -14,12 +14,12 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
     <header className="sticky top-0 z-20 border-b border-border bg-surface">
       <Container className="flex h-16 items-center gap-3">
         {categories.length > 0 ? (
-          <CategoryDrawer storeSlug={store.slug} categories={categories} />
+          <CategoryDrawer categories={categories} />
         ) : (
           <span aria-hidden="true" className="size-11 lg:hidden" />
         )}
         <Link
-          href={routes.catalog(store.slug)}
+          href={routes.home()}
           className="flex min-h-11 flex-1 items-center justify-center font-heading text-h2 font-bold text-fg lg:flex-none lg:justify-start"
         >
           {store.logoUrl ? (
@@ -32,7 +32,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
           <ul className="flex gap-6">
             {categories.map((category) => (
               <li key={category.slug}>
-                <Link href={routes.category(store.slug, category.slug)} className="inline-flex min-h-11 items-center text-label font-medium text-fg">
+                <Link href={routes.category(category.slug)} className="inline-flex min-h-11 items-center text-label font-medium text-fg">
                   {category.name}
                 </Link>
               </li>
@@ -40,7 +40,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
           </ul>
         </nav>
         <div className="ml-auto hidden w-72 lg:block">
-          <SearchField storeSlug={store.slug} id="search-desktop" />
+          <SearchField id="search-desktop" />
         </div>
         {whatsapp ? (
           <a
@@ -58,7 +58,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
       </Container>
       <div className="pb-3 lg:hidden">
         <Container>
-          <SearchField storeSlug={store.slug} id="search-mobile" />
+          <SearchField id="search-mobile" />
         </Container>
       </div>
     </header>
