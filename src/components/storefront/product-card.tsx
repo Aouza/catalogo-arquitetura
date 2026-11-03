@@ -5,13 +5,13 @@ import type { ProductView } from "@/modules/catalogs/types";
 import { ImagePlaceholder } from "./image-placeholder";
 import { PriceDisplay } from "./price-display";
 
-type Props = { storeSlug: string; product: ProductView; priority?: boolean };
+type Props = { product: ProductView; priority?: boolean };
 
-export function ProductCard({ storeSlug, product, priority = false }: Props) {
+export function ProductCard({ product, priority = false }: Props) {
   return (
     <li>
       <Link
-        href={routes.product(storeSlug, product.slug)}
+        href={routes.product(product.slug)}
         className="block overflow-hidden rounded-card border border-border bg-surface"
       >
         <div className="relative aspect-[4/5] bg-surface-subtle">

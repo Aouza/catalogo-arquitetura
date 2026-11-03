@@ -6,8 +6,8 @@
 **Aceite:** pipeline verde e documentação de setup.
 
 ## EPIC 01 — Catálogos, autenticação e autorização
-- Migrations de catálogo e membros; login; rotas protegidas; RLS testada.
-**Aceite:** admin A não acessa dados de B; anônimo não escreve.
+- Migrations da configuração da loja (linha única) e papel admin; login; rotas protegidas; RLS testada.
+**Aceite:** anônimo só lê o publicado e não escreve; apenas admin autenticado escreve.
 
 ## EPIC 02 — Domínio de produtos
 - Categorias, produtos, opções, valores, variantes, preço efetivo e constraints.
@@ -31,7 +31,7 @@
 **Aceite:** páginas publicadas compartilháveis e indexáveis; regressões e RLS testadas.
 
 ## EPIC 07 — Evoluções (não MVP)
-- Importação CSV/XLSX com prévia e relatório de erros; duplicação avançada; segundo catálogo; domínio próprio; SaaS.
+- Importação CSV/XLSX com prévia e relatório de erros; duplicação avançada; segundo catálogo (exigiria tenant, ADR-004); domínio próprio; SaaS.
 
 ## Ordem de trabalho
 Uma tarefa por vez. Para cada tarefa: objetivo, arquivos previstos, mudanças no esquema, testes, riscos, critérios de aceitação e resumo do resultado. Não iniciar próximo épico com migrações incompletas.

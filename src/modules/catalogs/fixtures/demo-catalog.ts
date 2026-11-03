@@ -24,7 +24,6 @@ const available = [{ isAvailable: true }, { isAvailable: false }];
 // Dados fictícios. Nome, textos e preços não são de nenhuma loja real.
 export const demoCatalog: FixtureCatalog = {
   store: {
-    slug: "demo-infantil",
     name: "Loja Exemplo",
     description: "Moda infantil para todas as fases da infância.",
     whatsappE164: "+5511999990000",

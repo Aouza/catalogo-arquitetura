@@ -1,10 +1,10 @@
 const seg = encodeURIComponent;
 
-// Único lugar que monta URLs públicas. Caminhos provisórios (ver OQ-15).
+// Único lugar que monta URLs públicas. Loja única: o catálogo vive na raiz (ADR-0001).
 export const routes = {
-  catalog: (slug: string) => `/${seg(slug)}`,
-  products: (slug: string) => `/${seg(slug)}/produtos`,
-  search: (slug: string) => `/${seg(slug)}/busca`,
-  category: (slug: string, categorySlug: string) => `/${seg(slug)}/categoria/${seg(categorySlug)}`,
-  product: (slug: string, productSlug: string) => `/${seg(slug)}/produto/${seg(productSlug)}`,
+  home: () => "/",
+  products: () => "/produtos",
+  search: () => "/busca",
+  category: (categorySlug: string) => `/categoria/${seg(categorySlug)}`,
+  product: (productSlug: string) => `/produto/${seg(productSlug)}`,
 };

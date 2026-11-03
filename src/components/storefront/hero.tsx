@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { routes } from "@/lib/routes";
 import type { HeroView } from "@/modules/catalogs/types";
 
-export function Hero({ storeSlug, hero }: { storeSlug: string; hero: HeroView }) {
+export function Hero({ hero }: { hero: HeroView }) {
   return (
     <section className="py-4">
       <Container>
@@ -25,7 +25,7 @@ export function Hero({ storeSlug, hero }: { storeSlug: string; hero: HeroView })
           <div className="flex flex-col items-start justify-center gap-3 p-6 lg:p-10">
             <h1 className="font-heading text-display font-bold text-fg">{hero.title}</h1>
             <p className="text-body text-fg">{hero.text}</p>
-            <ButtonLink href={routes.products(storeSlug)} variant="secondary">
+            <ButtonLink href={routes.products()} variant="secondary">
               Explorar produtos <ArrowRightIcon className="size-4" />
             </ButtonLink>
           </div>

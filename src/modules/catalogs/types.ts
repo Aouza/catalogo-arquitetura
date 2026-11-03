@@ -1,7 +1,6 @@
 import type { CatalogTheme } from "./theme/tokens";
 
 export type StoreInfo = {
-  slug: string;
   name: string;
   description: string;
   logoUrl?: string;

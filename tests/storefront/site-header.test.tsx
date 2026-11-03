@@ -2,18 +2,18 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { SiteHeader } from "@/components/storefront/site-header";
 
-const store = { slug: "loja", name: "Loja Exemplo", description: "Desc" };
+const store = { name: "Loja Exemplo", description: "Desc" };
 const categories = [{ slug: "bebes", name: "Bebês" }];
 
 describe("SiteHeader", () => {
   it("mostra o nome da loja em texto quando não há logo", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
     expect(html).toContain("Loja Exemplo");
-    expect(html).toContain('href="/loja"');
+    expect(html).toContain('href="/"');
   });
   it("tem busca GET para a rota de busca, com label", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
-    expect(html).toContain('action="/loja/busca"');
+    expect(html).toContain('action="/busca"');
     expect(html).toContain('name="q"');
     expect(html).toContain('placeholder="Buscar produtos..."');
     expect(html).toMatch(/<label[^>]*>Buscar produtos<\/label>/);
@@ -32,11 +32,11 @@ describe("SiteHeader", () => {
   it("tem botão de menu nomeado e links de categoria", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
     expect(html).toContain('aria-label="Abrir menu de categorias"');
-    expect(html).toContain('href="/loja/categoria/bebes"');
+    expect(html).toContain('href="/categoria/bebes"');
   });
   it("alvos de toque do logo e dos links de categoria têm pelo menos 44px", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
-    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/loja")(?=[^>]*min-h-11)[^>]*>'));
-    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/loja/categoria/bebes")(?=[^>]*min-h-11)[^>]*>Bebês</a></li></ul></nav>'));
+    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/")(?=[^>]*min-h-11)[^>]*>'));
+    expect(html).toMatch(new RegExp('<a(?=[^>]*href="/categoria/bebes")(?=[^>]*min-h-11)[^>]*>Bebês</a></li></ul></nav>'));
   });
 });

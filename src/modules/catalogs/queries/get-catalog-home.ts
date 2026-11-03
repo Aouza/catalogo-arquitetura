@@ -1,18 +1,14 @@
 import { demoCatalog, type FixtureCatalog } from "../fixtures/demo-catalog";
-import { isReservedSlug } from "../reserved-slugs";
 import type { CatalogHomeView, ProductView } from "../types";
 
 // Troque esta função por leitura do Supabase mantendo o contrato de CatalogHomeView.
-function findCatalog(slug: string): FixtureCatalog | null {
+function findCatalog(): FixtureCatalog | null {
   if (process.env.NODE_ENV === "production") return null;
-  return slug === demoCatalog.store.slug ? demoCatalog : null;
+  return demoCatalog;
 }
 
-export async function getCatalogHome(slug: string): Promise<CatalogHomeView | null> {
-  const normalized = slug.toLowerCase();
-  if (isReservedSlug(normalized)) return null;
-
-  const catalog = findCatalog(normalized);
+export async function getCatalogHome(): Promise<CatalogHomeView | null> {
+  const catalog = findCatalog();
   if (!catalog) return null;
 
   const products: ProductView[] = catalog.products

@@ -19,10 +19,10 @@ export function CatalogHome({ home }: { home: CatalogHomeView }) {
       </a>
       <SiteHeader store={store} categories={categories} />
       <main id="conteudo" className="flex-1">
-        {hero ? <Hero storeSlug={store.slug} hero={hero} /> : <h1 className="sr-only">{store.name}</h1>}
-        <CategoryStrip storeSlug={store.slug} categories={categories} />
+        {hero ? <Hero hero={hero} /> : <h1 className="sr-only">{store.name}</h1>}
+        <CategoryStrip categories={categories} />
         {products.length > 0 ? (
-          <ProductGrid storeSlug={store.slug} products={products} order={productsOrder} />
+          <ProductGrid products={products} order={productsOrder} />
         ) : (
           <EmptyState whatsappE164={store.whatsappE164} />
         )}

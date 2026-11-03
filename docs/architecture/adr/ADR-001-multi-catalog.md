@@ -1,6 +1,6 @@
 # ADR-001 — Uma aplicação multi-catálogo
 
-**Status:** proposta aceita como baseline (validar antes da primeira migration)
+**Status:** substituída pela ADR-004 (loja única)
 
 ## Contexto
 Catálogo inicial do tio; potencial segundo catálogo de brechó da mãe. Evitar forks de código e evitar custo de SaaS completo.
