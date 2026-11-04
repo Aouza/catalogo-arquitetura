@@ -7,4 +7,6 @@ export const routes = {
   search: () => "/busca",
   category: (categorySlug: string) => `/categoria/${seg(categorySlug)}`,
   product: (productSlug: string) => `/produto/${seg(productSlug)}`,
+  login: () => "/login",
+  admin: () => "/admin",
 };
