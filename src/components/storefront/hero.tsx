@@ -18,14 +18,14 @@ export function Hero({ hero }: { hero: HeroView }) {
                 fill
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
+                className="object-cover object-[70%_center] lg:object-center"
               />
             </div>
           )}
           <div className="flex flex-col items-start justify-center gap-3 p-6 lg:p-10">
             <h1 className="font-heading text-display font-bold text-fg">{hero.title}</h1>
             <p className="text-body text-fg">{hero.text}</p>
-            <ButtonLink href={routes.products()} variant="secondary">
+            <ButtonLink href={routes.products()} variant="primary">
               Explorar produtos <ArrowRightIcon className="size-4" />
             </ButtonLink>
           </div>

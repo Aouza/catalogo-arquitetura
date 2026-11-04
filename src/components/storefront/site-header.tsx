@@ -23,7 +23,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
           className="flex min-h-11 flex-1 items-center justify-center font-heading text-h2 font-bold text-fg lg:flex-none lg:justify-start"
         >
           {store.logoUrl ? (
-            <Image src={store.logoUrl} alt={store.name} width={120} height={32} className="mx-auto h-8 w-auto lg:mx-0" />
+            <Image src={store.logoUrl} alt={store.name} width={214} height={40} priority className="mx-auto h-8 w-auto lg:mx-0 lg:h-10" />
           ) : (
             store.name
           )}
@@ -48,7 +48,7 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Conversar pelo WhatsApp"
-            className="grid size-11 place-items-center text-fg"
+            className="grid size-11 place-items-center text-action hover:text-action-hover"
           >
             <WhatsAppIcon />
           </a>

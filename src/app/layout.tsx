@@ -7,8 +7,8 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: "Catálogo Digital",
-  description: "Vitrine digital de produtos com contato via WhatsApp",
+  title: "Family Store Moda",
+  description: "Moda infantil com consulta pelo WhatsApp",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

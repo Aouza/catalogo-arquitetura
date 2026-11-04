@@ -28,3 +28,14 @@ describe("CategoryStrip", () => {
     expect(renderToStaticMarkup(<CategoryStrip categories={[]} />)).toBe("");
   });
 });
+
+describe("CategoryStrip com imagem", () => {
+  it("mostra a imagem da categoria, sem círculo e sem inicial", () => {
+    const html = renderToStaticMarkup(
+      <CategoryStrip categories={[{ slug: "bebes", name: "Bebês", imageUrl: "/images/categories/baby.webp" }]} />,
+    );
+    expect(html).toContain("<img");
+    expect(html).not.toContain("rounded-full");
+    expect(html).not.toContain(">B<");
+  });
+});
