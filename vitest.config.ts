@@ -8,5 +8,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
+    // Testes de banco exigem Supabase local: `npm run test:db`.
+    exclude: ["tests/db/**", "node_modules/**"],
   },
 });

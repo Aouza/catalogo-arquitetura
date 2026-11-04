@@ -1,19 +1,22 @@
 # Segurança, autorização e isolamento
 
+Modelo de loja única (ADR-004): a distinção é entre público, usuário autenticado sem papel e administrador.
+
 ## Modelo de ameaças
-Administrador A não pode ler/alterar rascunhos, imagens privadas ou produtos do catálogo B. Visitante só acessa dados publicados. Usuário anônimo não pode modificar registros. Upload malicioso ou excessivo não pode comprometer serviço/custos.
+Visitante só acessa dados publicados. Usuário anônimo ou autenticado sem papel de admin não pode modificar registros nem ler rascunhos e imagens privadas. Upload malicioso ou excessivo não pode comprometer serviço/custos.
 
 ## Requisitos
-1. Supabase Auth para administradores; sessões verificadas no servidor.
-2. RLS habilitada em todas as tabelas de domínio; políticas de leitura pública restritas a catálogos/produtos publicados conforme regra de visibilidade.
-3. Políticas de escrita vinculadas a `catalog_members` e papéis autorizados.
-4. Evitar políticas recursivas em `catalog_members`; usar função SECURITY DEFINER cuidadosamente revisada quando necessário.
-5. Storage: upload apenas para prefixo de catálogo autorizado; limites de tamanho, MIME e extensão; nomes aleatórios; não confiar apenas no MIME enviado.
-6. Fotos de produtos publicados podem ser servidas publicamente; uploads temporários/rascunhos exigem estratégia explícita (bucket privado + URLs assinadas ou fluxo de publicação). **Decisão pendente.**
+1. Supabase Auth (e-mail e senha) para administradores; sessão verificada no servidor com `getUser()`, nunca confiando em `getSession()` ou em cookies sem validação.
+2. RLS habilitada em todas as tabelas de domínio; políticas de leitura pública restritas ao conteúdo publicado (BR-011).
+3. Políticas de escrita exigem `is_admin()`; não há cadastro público de administradores.
+4. Evitar políticas recursivas em `admins`; `is_admin()` é `SECURITY DEFINER` com `search_path` fixo e `EXECUTE` revogado de `PUBLIC`.
+5. Storage: upload apenas por admin; limites de tamanho, MIME e extensão; nomes aleatórios; não confiar apenas no MIME enviado.
+6. Fotos de produtos publicados podem ser servidas publicamente; uploads temporários/rascunhos exigem estratégia explícita (bucket privado + URLs assinadas ou fluxo de publicação). **Decisão pendente (OQ-04).**
 7. Service role nunca no browser e nunca para contornar autorização de requisições comuns.
-8. Limitar operações sensíveis, validar payload com Zod e sanitizar entrada textual.
-9. Logs sem tokens, segredos ou informações privadas; gestão de secrets via ambiente.
-10. Revisar políticas com testes de dois catálogos e usuário anônimo.
+8. Login com mensagem de erro genérica (sem revelar se o e-mail existe); limitar operações sensíveis, validar payload com Zod e sanitizar entrada textual.
+9. A checagem de admin no servidor (`requireAdmin`) é a autorização; redirecionamento em proxy/middleware é apenas conveniência.
+10. Logs sem tokens, segredos ou informações privadas; gestão de secrets via ambiente.
+11. Revisar políticas com testes de anônimo, autenticado sem papel e admin.
 
 ## Casos de teste obrigatórios
-Anônimo não altera dados; admin A não lê rascunho de B; admin A não edita produto de B; associação de categoria de B a produto de A falha; upload em prefixo de B falha; imagem de rascunho não vaza conforme estratégia escolhida; publicação expõe apenas campos esperados.
+Anônimo não altera dados; autenticado não-admin não altera dados; admin altera; anônimo não lê `admins`; segunda linha de `store_settings` é rejeitada; upload por não-admin falha; imagem de rascunho não vaza conforme estratégia escolhida; publicação expõe apenas campos esperados.

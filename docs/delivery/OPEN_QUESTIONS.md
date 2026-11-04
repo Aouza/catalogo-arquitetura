@@ -6,7 +6,7 @@
 | OQ-02 | Fotos são obrigatórias para publicar? | Validação | Recomendado ao menos 1 |
 | OQ-03 | Produtos sem preço ou com preço zero são permitidos? | Domínio/UI | Exigir preço; decidir zero |
 | OQ-04 | Como tratar imagens de rascunho: privadas ou públicas não indexadas? | Segurança/Storage | Preferir privadas até publicação |
-| OQ-05 | Quais papéis administrativos são necessários no MVP? | RLS | Um owner inicialmente |
+| OQ-05 | ~~Papéis administrativos~~ **Resolvida (BR-005):** um único papel `admin`, criado fora do app. | RLS | — |
 | OQ-06 | Exclusão definitiva de produtos será permitida? | Integridade | Arquivar inicialmente |
 | OQ-07 | Máximo de opções/valores/combinações por produto? | UX/performance | Limites pequenos e configuráveis |
 | OQ-08 | O visitante pode clicar no WhatsApp sem selecionar tamanho/cor? | UX | Exigir combinação válida |
