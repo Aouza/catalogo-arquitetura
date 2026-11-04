@@ -1,10 +1,11 @@
 # Regras de negócio (identificadores estáveis)
 
-## Catálogos e acesso
-- **BR-001** Produto, categoria e opções pertencem a um catálogo por meio do produto ou diretamente.
-- **BR-002** Apenas membros autorizados podem administrar catálogo; isolamento é obrigatório inclusive em consultas e Storage.
-- **BR-003** Cada catálogo possui slug único globalmente na proposta inicial.
-- **BR-004** O WhatsApp de contato é configurado por catálogo, não por produto no MVP.
+## Loja e acesso (ADR-004: loja única)
+- **BR-001** Produto, categoria e opções pertencem à loja única; não há `catalog_id` nem slug de catálogo.
+- **BR-002** Apenas administradores autenticados (tabela `admins`) escrevem; o público só lê o publicado. A autorização é verificada no servidor e reforçada por RLS, inclusive no Storage.
+- **BR-003** A configuração da loja é uma única linha (`store_settings`), que nunca é criada em duplicata nem removida.
+- **BR-004** O WhatsApp de contato é configurado na loja, não por produto no MVP.
+- **BR-005** No MVP existe um único papel: `admin` (resolve OQ-05). Admins são criados fora do app (SQL ou painel Supabase); não há cadastro público.
 
 ## Produto
 - **BR-010** Estados de publicação: `draft`, `published`, `archived`.
@@ -36,6 +37,6 @@
 - **BR-042** Não criar pedido, reserva ou pagamento ao clicar no WhatsApp.
 
 ## Integridade
-- **BR-050** Nunca confiar em valores monetários, associação de catálogo ou disponibilidade enviados sem validação no servidor.
-- **BR-051** Slugs de produto são únicos dentro do catálogo, não necessariamente globalmente.
+- **BR-050** Nunca confiar em valores monetários, papel de administrador ou disponibilidade enviados sem validação no servidor.
+- **BR-051** Slugs de produto e de categoria são únicos na loja (único globalmente, pois há uma só loja).
 - **BR-052** Importação futura deve reutilizar os mesmos casos de uso e validações do cadastro manual.
