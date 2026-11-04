@@ -147,6 +147,16 @@ describe("admins", () => {
     expect(error).not.toBeNull();
   });
 
+  it("is_admin() retorna true para admin e false para usuário comum", async () => {
+    const asAdmin = await admin.client.rpc("is_admin");
+    expect(asAdmin.error).toBeNull();
+    expect(asAdmin.data).toBe(true);
+
+    const asPlain = await plainUser.client.rpc("is_admin");
+    expect(asPlain.error).toBeNull();
+    expect(asPlain.data).toBe(false);
+  });
+
   it("anônimo não executa is_admin()", async () => {
     const { error } = await anonClient().rpc("is_admin");
     expect(error).not.toBeNull();

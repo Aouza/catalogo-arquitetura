@@ -34,7 +34,9 @@ as $$
   );
 $$;
 
-revoke all on function public.is_admin() from public;
+-- O Supabase concede EXECUTE a anon/authenticated por default privileges; revogar só de
+-- PUBLIC não basta, então revogamos também de anon explicitamente.
+revoke all on function public.is_admin() from public, anon, authenticated;
 grant execute on function public.is_admin() to authenticated;
 
 -- ---------------------------------------------------------------------------
@@ -64,6 +66,9 @@ begin
   return new;
 end;
 $$;
+
+-- Função de trigger: não precisa ser chamável por nenhum papel da API.
+revoke all on function public.set_updated_at() from public, anon, authenticated;
 
 create trigger store_settings_set_updated_at
   before update on public.store_settings
