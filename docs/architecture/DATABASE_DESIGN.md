@@ -36,7 +36,10 @@ Referências de opções, variantes e imagens nunca podem cruzar produtos: usar 
 BRL em centavos com `BIGINT` e CHECK >= 0; timestamps UTC (`timestamptz`); UUIDs; não usar float para dinheiro. Slugs case-normalizados. Caminhos de imagens armazenados no banco; URL de entrega derivada conforme política de bucket.
 
 ## Política de exclusão
-Preferir arquivar produto; exclusão definitiva e limpeza de mídia precisam de fluxo explícito, autorização e tratamento de referências. Cascatas somente após revisão.
+O admin pode excluir qualquer produto (BR-015): `DELETE` em `products` permitido só a `is_admin()`, com `ON DELETE CASCADE` para opções, valores, variantes, vínculos e imagens. A limpeza dos arquivos no Storage é responsabilidade do fluxo de mídia (EPIC 03), pois o banco não apaga objetos do Storage. `products.category_id` usa `ON DELETE SET NULL`: excluir categoria não apaga produtos. Arquivar continua sendo a alternativa que preserva o produto.
+
+## Limites por produto (BR-017)
+Triggers validam no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes por produto.
 
 ## Migrações
 001 store_settings/admins/RLS (EPIC 01); 002 categories/products; 003 options/values/variants; 004 images; 005 funções de consistência e publicação (sequência ilustrativa, ajustar para dependências).

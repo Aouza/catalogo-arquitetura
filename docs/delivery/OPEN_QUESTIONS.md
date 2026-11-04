@@ -3,12 +3,12 @@
 | ID | Pergunta | Impacto | Sugestão inicial |
 |---|---|---|---|
 | OQ-01 | Nome real do catálogo, domínio e WhatsApp? | Identidade/URLs | Configuráveis |
-| OQ-02 | Fotos são obrigatórias para publicar? | Validação | Recomendado ao menos 1 |
-| OQ-03 | Produtos sem preço ou com preço zero são permitidos? | Domínio/UI | Exigir preço; decidir zero |
+| OQ-02 | ~~Fotos obrigatórias para publicar?~~ **Resolvida (BR-016):** publicar exige ao menos 1 foto; a regra é ativada no EPIC 03, quando as imagens existirem. | Validação | — |
+| OQ-03 | ~~Preço zero?~~ **Resolvida:** preço é obrigatório e zero é permitido (`base_price_cents >= 0`, BR-013). | Domínio/UI | — |
 | OQ-04 | Como tratar imagens de rascunho: privadas ou públicas não indexadas? | Segurança/Storage | Preferir privadas até publicação |
 | OQ-05 | ~~Papéis administrativos~~ **Resolvida (BR-005):** um único papel `admin`, criado fora do app. | RLS | — |
-| OQ-06 | Exclusão definitiva de produtos será permitida? | Integridade | Arquivar inicialmente |
-| OQ-07 | Máximo de opções/valores/combinações por produto? | UX/performance | Limites pequenos e configuráveis |
+| OQ-06 | ~~Exclusão definitiva?~~ **Resolvida (BR-015):** o admin pode excluir qualquer produto; arquivar continua disponível. | Integridade | — |
+| OQ-07 | ~~Limites por produto~~ **Resolvida (BR-017):** no máximo 2 opções, 20 valores e 100 variantes, validados no banco. | UX/performance | — |
 | OQ-08 | O visitante pode clicar no WhatsApp sem selecionar tamanho/cor? | UX | Exigir combinação válida |
 | OQ-09 | Produto esgotado aparece na listagem ou fica oculto? | Vitrine | Mostrar com selo indisponível |
 | OQ-10 | Busca por texto entra no MVP ou P1? | Escopo | P1 |
