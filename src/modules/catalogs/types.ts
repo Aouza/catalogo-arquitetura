@@ -4,6 +4,8 @@ export type StoreInfo = {
   name: string;
   description: string;
   logoUrl?: string;
+  /** Logo completo (com "MODA"), usado no cabeçalho desktop; sem ele vale `logoUrl`. */
+  logoFullUrl?: string;
   whatsappE164?: string;
   instagram?: string;
   address?: string;

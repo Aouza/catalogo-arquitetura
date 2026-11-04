@@ -12,6 +12,7 @@
   --theme-brand: #718775;
   --theme-accent: #C98470;
   --theme-accent-strong: #9E5643;
+  --theme-hero-wall: #E0CAB8; /* cor da parede da foto do hero; a foto funde com ela */
   --theme-border: #E8E4DC;
   --theme-border-strong: #8C8880;
   --theme-font-heading: var(--font-dm-sans);
@@ -29,11 +30,13 @@
   --color-brand: var(--theme-brand);
   --color-accent: var(--theme-accent);
   --color-accent-strong: var(--theme-accent-strong);
+  --color-hero-wall: var(--theme-hero-wall);
   --color-border: var(--theme-border);
   --color-border-strong: var(--theme-border-strong);
 
   --font-heading: var(--theme-font-heading), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--theme-font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-dm-serif-display), Georgia, "Times New Roman", serif;
 
   --radius-control: 10px;
   --radius-card: 14px;

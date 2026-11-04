@@ -34,6 +34,30 @@ describe("SiteHeader", () => {
     expect(html).toContain('aria-label="Abrir menu de categorias"');
     expect(html).toContain('href="/categoria/bebes"');
   });
+  it("usa logo completo no desktop e compacto no celular quando há os dois", () => {
+    const html = renderToStaticMarkup(
+      <SiteHeader store={{ ...store, logoUrl: "/c.png", logoFullUrl: "/f.png" }} categories={categories} />,
+    );
+    expect(html).toMatch(/<img[^>]*lg:hidden[^>]*/);
+    expect(html).toMatch(/<img[^>]*hidden h-12[^>]*lg:block/);
+    expect(html.match(/<img/g)).toHaveLength(2);
+  });
+  it("com só o logo compacto renderiza uma imagem", () => {
+    const html = renderToStaticMarkup(<SiteHeader store={{ ...store, logoUrl: "/c.png" }} categories={categories} />);
+    expect(html.match(/<img/g)).toHaveLength(1);
+  });
+  it("cabeçalho sem borda inferior e busca em pílula sem borda", () => {
+    const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
+    expect(html).toMatch(/<header[^>]*bg-bg/);
+    expect(html).not.toMatch(/<header[^>]*border-b/);
+    expect(html).toContain("rounded-full");
+  });
+  it("não tem favoritos nem carrinho (fora do MVP)", () => {
+    const html = renderToStaticMarkup(
+      <SiteHeader store={{ ...store, whatsappE164: "+5511999990000" }} categories={categories} />,
+    );
+    expect(html.toLowerCase()).not.toMatch(/favorit|carrinho/);
+  });
   it("alvos de toque do logo e dos links de categoria têm pelo menos 44px", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
     expect(html).toMatch(new RegExp('<a(?=[^>]*href="/")(?=[^>]*min-h-11)[^>]*>'));

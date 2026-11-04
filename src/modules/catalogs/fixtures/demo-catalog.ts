@@ -26,6 +26,7 @@ export const demoCatalog: FixtureCatalog = {
   store: {
     name: "Family Store Moda",
     logoUrl: "/images/logo/logo-compact.png",
+    logoFullUrl: "/images/logo/logo.png",
     description: "Moda infantil para todas as fases da infância.",
     whatsappE164: "+5511999990000",
     instagram: "@lojaexemplo",
