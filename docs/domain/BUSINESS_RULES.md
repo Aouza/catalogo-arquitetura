@@ -13,6 +13,9 @@
 - **BR-012** Arquivar não apaga o histórico nem arquivos automaticamente.
 - **BR-013** Produto possui preço base em centavos BRL, não negativo.
 - **BR-014** Produto simples pode ter uma variação padrão sem opções visíveis.
+- **BR-015** O admin pode excluir definitivamente qualquer produto (rascunho, publicado ou arquivado). A exclusão remove em cascata suas opções, valores, variantes e imagens; arquivos no Storage são limpos pelo fluxo de mídia (EPIC 03). Links já compartilhados passam a responder 404. Arquivar continua sendo a alternativa que preserva o produto (BR-012).
+- **BR-016** Publicar exige nome, preço válido, slug, ao menos uma variação válida e ao menos 1 imagem. A exigência de imagem é ativada no EPIC 03, quando o cadastro de imagens existir.
+- **BR-017** Limites por produto, validados no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes.
 
 ## Opções e variações
 - **BR-020** Tipos de opção são configuráveis por produto; interface prioriza `color` e `size`.
