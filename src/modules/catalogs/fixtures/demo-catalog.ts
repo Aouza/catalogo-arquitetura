@@ -35,10 +35,10 @@ export const demoCatalog: FixtureCatalog = {
   },
   theme: defaultTheme,
   hero: {
-    title: "Pequenos estilos. Grandes descobertas.",
-    text: "Moda infantil para todas as fases da infância.",
-    imageUrl: "/images/hero/hero.webp",
-    imageAlt: "Menino e menina sorrindo, sentados lado a lado em um ambiente aconchegante",
+    title: "Moda, conforto e estilo para todos.",
+    text: "Peças especiais para acompanhar cada fase da família.",
+    imageUrl: "/images/hero/hero-family.webp",
+    imageAlt: "Família sorrindo no sofá: pai, mãe, duas crianças e um bebê",
   },
   categories: [
     { slug: "bebes", name: "Bebês", imageUrl: "/images/categories/baby.webp" },
