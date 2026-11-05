@@ -31,7 +31,7 @@
 
 ## Arquivos de imagem no projeto (2026-11-03)
 - `public/images/logo/logo.png` (completo, com "MODA") e `logo-compact.png` (sem "MODA", usado no cabeçalho: a 32 px o "MODA" fica ilegível). Só PNG por enquanto; SVG fica para depois.
-- `public/images/hero/hero.webp`: 16:9. No celular (4:5) o enquadramento usa `object-position: 70%` para manter as duas crianças.
+- `public/images/hero/hero-family.webp`: 2:1 (1774×887), foto da família sem texto; o título e a legenda vêm do HTML. No celular (4:5) o enquadramento usa `object-position: 70%`, a validar com cinco pessoas na foto.
 - `public/images/placeholders/*.webp`: silhuetas de roupa na paleta, só para visualizar a grade enquanto não há fotos reais (geradas por script, sem relação com produtos reais).
 - `public/images/categories/*.webp`: quadrados 400 px com fundo transparente, exibidos como imagens (sem círculo). Os cantos pretos e halos dos originais foram removidos.
 - Originais em alta resolução ficam em `design-source/` (ignorado pelo git).

@@ -20,7 +20,7 @@ describe("CatalogHome", () => {
     expect(html).toContain("--theme-action:#5E7462");
     expect(html).toContain('id="conteudo"');
     expect(html).toContain("Pular para o conteúdo");
-    expect(html).toContain("Pequenos estilos. Grandes descobertas.");
+    expect(html).toContain("Moda, conforto e estilo para todos.");
     expect(html).toContain("Novidades");
     expect(html).toContain("Vestido Floral");
     expect(html).toContain("<footer");
