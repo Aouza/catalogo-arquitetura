@@ -11,7 +11,7 @@ Visitante só acessa dados publicados. Usuário anônimo ou autenticado sem pape
 3. Políticas de escrita exigem `is_admin()`; não há cadastro público de administradores.
 4. Evitar políticas recursivas em `admins`; `is_admin()` é `SECURITY DEFINER` com `search_path` fixo e `EXECUTE` revogado de `PUBLIC`.
 5. Storage: upload apenas por admin; limites de tamanho, MIME e extensão; nomes aleatórios; não confiar apenas no MIME enviado.
-6. Fotos de produtos publicados podem ser servidas publicamente; uploads temporários/rascunhos exigem estratégia explícita (bucket privado + URLs assinadas ou fluxo de publicação). **Decisão pendente (OQ-04).**
+6. Fotos ficam em bucket privado (`product-images`). O público só lê o arquivo de uma foto cadastrada de produto publicado; rascunhos, arquivados e arquivos sem foto cadastrada (órfãos) são visíveis só ao admin (OQ-04). O admin pré-visualiza por URLs assinadas temporárias.
 7. Service role nunca no browser e nunca para contornar autorização de requisições comuns.
 8. Login com mensagem de erro genérica (sem revelar se o e-mail existe); limitar operações sensíveis, validar payload com Zod e sanitizar entrada textual.
 9. A checagem de admin no servidor (`requireAdmin`) é a autorização; redirecionamento em proxy/middleware é apenas conveniência.

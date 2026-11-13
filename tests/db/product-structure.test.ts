@@ -7,6 +7,7 @@ import {
   deleteUser,
   serviceClient,
   type TestUser,
+  addImage,
 } from "./helpers";
 
 let admin: TestUser;
@@ -78,6 +79,7 @@ async function snapshot(productId: string) {
 }
 
 async function publish(productId: string) {
+  await addImage(productId);
   return db().from("products").update({ status: "published" }).eq("id", productId);
 }
 

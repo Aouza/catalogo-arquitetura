@@ -8,6 +8,8 @@ export type ProductErrorCode =
   | "incomplete_product"
   | "limit_exceeded"
   | "invalid_transition"
+  | "image_limit"
+  | "invalid_file"
   | "unexpected";
 
 export type ProductError = {
@@ -26,6 +28,7 @@ export const PUBLICATION_ISSUE_MESSAGES: Record<string, string> = {
   no_variants: "Cadastre ao menos uma opção de compra.",
   option_without_values: "Toda opção precisa de ao menos um valor.",
   incomplete_variants: "Há combinações incompletas: cada uma precisa de um valor de cada opção.",
+  no_images: "Adicione ao menos uma foto.",
 };
 
 /** Código técnico da pendência → mensagem para o admin. */
@@ -55,6 +58,14 @@ export function mapDbError(error: DbError): ProductError {
       code: "limit_exceeded",
       message: "Limite excedido: no máximo 2 opções, 20 valores e 100 combinações por produto.",
     };
+  }
+
+  if (/more than 10 images/.test(text)) {
+    return { code: "image_limit", message: "Limite de 10 fotos por produto." };
+  }
+
+  if (/invalid image list/.test(text)) {
+    return { code: "validation", message: "A lista de fotos não corresponde às fotos do produto." };
   }
 
   if (code === "23505" && /slug/i.test(text)) {
