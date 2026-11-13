@@ -28,13 +28,33 @@ async function seedCategory(name = "Categoria de teste") {
 }
 
 async function seedProduct(status: "draft" | "published" | "archived", extra = {}) {
+  // Publicar exige variante válida (migration 3/3): nasce rascunho com variante padrão.
   const { data, error } = await serviceClient()
     .from("products")
-    .insert({ slug: slug("prod"), name: `Produto ${status}`, base_price_cents: 1000, status, ...extra })
+    .insert({
+      slug: slug("prod"),
+      name: `Produto ${status}`,
+      base_price_cents: 1000,
+      ...extra,
+      status: status === "published" ? "draft" : status,
+    })
     .select()
     .single();
   if (error) throw new Error(error.message);
   createdProducts.push(data.id);
+
+  if (status === "published") {
+    const variant = await serviceClient().from("product_variants").insert({ product_id: data.id });
+    if (variant.error) throw new Error(variant.error.message);
+    const published = await serviceClient()
+      .from("products")
+      .update({ status: "published" })
+      .eq("id", data.id)
+      .select()
+      .single();
+    if (published.error) throw new Error(published.error.message);
+    return published.data;
+  }
   return data;
 }
 
