@@ -35,4 +35,4 @@ Vestido: preço base 7990; cor Rosa/Azul, tamanho 2/4; Rosa+4 override 8990; Azu
 Brechó: jaqueta única, uma variação padrão, sem necessidade de criar opções.
 
 ## Estados e transições
-`draft -> published -> archived`; permitir `published -> draft` e `archived -> draft` mediante edição autorizada. Publicação requer nome, preço válido (zero permitido), slug, pelo menos uma variação válida e pelo menos 1 imagem (BR-016; a exigência de imagem é ativada no EPIC 03).
+`draft -> published -> archived`; permitir `published -> draft` e `archived -> draft` mediante edição autorizada. Publicação requer nome, preço válido (zero permitido), slug, pelo menos uma variação válida e pelo menos 1 imagem (BR-016).

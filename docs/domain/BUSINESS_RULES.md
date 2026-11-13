@@ -14,7 +14,7 @@
 - **BR-013** Produto possui preço base em centavos BRL, não negativo.
 - **BR-014** Produto simples pode ter uma variação padrão sem opções visíveis.
 - **BR-015** O admin pode excluir definitivamente qualquer produto (rascunho, publicado ou arquivado). A exclusão remove em cascata suas opções, valores, variantes e imagens; arquivos no Storage são limpos pelo fluxo de mídia (EPIC 03). Links já compartilhados passam a responder 404. Arquivar continua sendo a alternativa que preserva o produto (BR-012).
-- **BR-016** Publicar exige nome, preço válido, slug, ao menos uma variação válida e ao menos 1 imagem. A exigência de imagem é ativada no EPIC 03, quando o cadastro de imagens existir.
+- **BR-016** Publicar exige nome, preço válido, slug, ao menos uma variação válida e ao menos 1 imagem. Um produto publicado não pode ficar sem foto (excluir a última foto é recusado).
 - **BR-017** Limites por produto, validados no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes.
 
 ## Opções e variações
@@ -32,7 +32,7 @@
 - **BR-030** Imagens gerais pertencem ao produto; imagens específicas podem apontar para um valor de opção do mesmo produto.
 - **BR-031** Seleção de cor mostra primeiro imagens associadas àquela cor; usar imagens gerais como fallback.
 - **BR-032** Alterar tamanho não exige duplicação de imagens.
-- **BR-033** Ordenação de imagens é persistida; ao excluir imagem, remover referência e limpar arquivo conforme política segura.
+- **BR-033** Ordenação de imagens é persistida; ao excluir imagem, remover referência e limpar arquivo conforme política segura. Limites: 10 fotos por produto, 5 MB cada, JPEG/PNG/WebP (OQ-13). Remover uma cor remove as fotos dela.
 
 ## Contato
 - **BR-040** Mensagem WhatsApp contém produto, valores selecionados, preço efetivo exibido e URL canônica.

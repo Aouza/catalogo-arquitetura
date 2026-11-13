@@ -53,6 +53,24 @@ export async function createAdmin(): Promise<TestUser> {
   return user;
 }
 
+/**
+ * Cadastra uma foto de teste (só a linha; o arquivo não precisa existir no Storage).
+ * Publicar exige ao menos uma foto (BR-016).
+ */
+export async function addImage(productId: string, optionValueId: string | null = null) {
+  const { data, error } = await serviceClient()
+    .from("product_images")
+    .insert({
+      product_id: productId,
+      option_value_id: optionValueId,
+      storage_path: `${productId}/${randomUUID()}.png`,
+    })
+    .select()
+    .single();
+  if (error) throw new Error(`addImage falhou: ${error.message}`);
+  return data;
+}
+
 export async function deleteUser(user: TestUser): Promise<void> {
   await serviceClient().auth.admin.deleteUser(user.id);
 }
