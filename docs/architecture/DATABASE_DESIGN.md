@@ -14,7 +14,7 @@
 | `product_option_values` | id, option_id, product_id (denormalizado), label, code, position | UNIQUE(option_id,code); FK composta (option_id,product_id) |
 | `product_variants` | id, product_id, combination_key, price_override_cents nullable, is_available, position | UNIQUE(product_id,combination_key); override >= 0 |
 | `variant_option_values` | variant_id, option_value_id, product_id, option_id (os dois últimos preenchidos por trigger a partir do valor) | PK(variant_id,option_value_id); UNIQUE(variant_id,option_id); FKs compostas impedem cruzar produtos; sem UPDATE |
-| `product_images` | id, product_id, option_value_id nullable, storage_path, alt_text, position, created_at | valor de opção deve pertencer ao produto |
+| `product_images` | id, product_id, option_value_id nullable, storage_path (único), alt_text, position, created_at | FK composta (option_value_id, product_id): valor de opção do próprio produto, e removê-lo remove a foto; `storage_path` começa por `<product_id>/`; máx. 10 por produto; `product_id` e `storage_path` imutáveis |
 
 ## Combinação das variantes
 `combination_key` é calculada por trigger (nunca vem do cliente): ids dos valores vinculados, ordenados e separados por vírgula; `''` identifica a variante padrão de produto simples. Cada vínculo inserido ou removido recalcula a chave, e `UNIQUE(product_id, combination_key)` rejeita duplicatas (BR-022). Consequência: uma variante sem vínculos já ocupa a chave `''`, então as variantes de um produto com opções devem ser completadas uma a uma (inserir variante, inserir seus vínculos, próxima variante). Inserir em lote várias variantes vazias falha; o caso de uso deve ser sequencial e transacional. Completude (um valor por opção) e variante padrão única são verificadas na publicação (ver "Regras de publicação"). O preço efetivo (BR-024) é calculado na aplicação.
@@ -39,7 +39,7 @@ Referências de opções, variantes e imagens nunca podem cruzar produtos: FKs c
 BRL em centavos com `BIGINT` e CHECK >= 0; timestamps UTC (`timestamptz`); UUIDs; não usar float para dinheiro. Slugs case-normalizados. Caminhos de imagens armazenados no banco; URL de entrega derivada conforme política de bucket.
 
 ## Regras de publicação (BR-016, BR-021)
-`product_publication_issues(product_id)` devolve as pendências (`no_variants`, `option_without_values`, `incomplete_variants`); lista vazia = publicável. Nome, slug e preço já são garantidos por constraints de `products`. **Foto não é exigida ainda:** entra no EPIC 03 acrescentando `no_images` nessa função.
+`product_publication_issues(product_id)` devolve as pendências (`no_variants`, `option_without_values`, `incomplete_variants`); lista vazia = publicável. Nome, slug e preço já são garantidos por constraints de `products`. Também devolve `no_images` quando o produto não tem foto (BR-016). Um constraint trigger em `product_images` impede excluir a última foto de produto publicado.
 
 Constraint triggers `DEFERRABLE INITIALLY DEFERRED` em `products`, `product_options`, `product_option_values`, `product_variants` e `variant_option_values` revalidam no COMMIT todo produto `published`, por qualquer caminho de escrita (inclusive service role). Consequências:
 - Não é possível publicar produto inválido, nem deixar inválido um produto já publicado (ex.: excluir a última variante ou um vínculo).
@@ -54,11 +54,18 @@ Constraint triggers `DEFERRABLE INITIALLY DEFERRED` em `products`, `product_opti
 - Payload: `options: [{code, name, position?, values: [{code, label, position?}]}]`; `variants: [{values: {optionCode: valueCode}, price_override_cents?, is_available?, position?}]`. Produto simples: `options: []` e uma variante com `values: {}`.
 - Rejeita payload malformado, códigos duplicados, combinação duplicada, variante incompleta ou com valor desconhecido; os limites de BR-017 e a validação de publicação do COMMIT continuam valendo.
 
+## Fotos e Storage (EPIC 03)
+- Bucket privado `product-images` (5 MB, JPEG/PNG/WebP), arquivos em `<product_id>/<uuid>.<ext>`.
+- Policies em `storage.objects`: admin faz tudo; o público só lê objetos referenciados por uma foto de produto publicado. Órfãos nunca são públicos.
+- `position` é atribuída no fim da galeria por trigger; `reorder_product_images(product_id, ids[])` reordena atomicamente (a lista precisa conter exatamente as fotos do produto).
+- Envio: o app valida tamanho e formato pelo conteúdo, envia o arquivo e registra a foto; se o registro falhar, remove o arquivo. Se a limpeza falhar, ou o produto for excluído, `cleanupOrphanFiles` recolhe os arquivos sem foto cadastrada (ignora arquivos com menos de 10 min). O banco não apaga objetos do Storage.
+- Entrega pública (URLs estáveis/cacheáveis para a vitrine e OG) é decidida no EPIC 05/06; hoje o admin usa URLs assinadas.
+
 ## Política de exclusão
-O admin pode excluir qualquer produto (BR-015): `DELETE` em `products` permitido só a `is_admin()`, com `ON DELETE CASCADE` para opções, valores, variantes, vínculos e imagens. A limpeza dos arquivos no Storage é responsabilidade do fluxo de mídia (EPIC 03), pois o banco não apaga objetos do Storage. `products.category_id` usa `ON DELETE SET NULL`: excluir categoria não apaga produtos. Arquivar continua sendo a alternativa que preserva o produto.
+O admin pode excluir qualquer produto (BR-015): `DELETE` em `products` permitido só a `is_admin()`, com `ON DELETE CASCADE` para opções, valores, variantes, vínculos e imagens. A limpeza dos arquivos no Storage é feita pelo fluxo de mídia (`deleteProduct` apaga a pasta do produto; `cleanupOrphanFiles` é a rede de segurança), pois o banco não apaga objetos do Storage. `products.category_id` usa `ON DELETE SET NULL`: excluir categoria não apaga produtos. Arquivar continua sendo a alternativa que preserva o produto.
 
 ## Limites por produto (BR-017)
 Triggers validam no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes por produto.
 
 ## Migrações
-20261104120000 store_settings/admins/RLS (EPIC 01); 20261105100000 categories/products; 20261113100000 options/values/variants; 20261113200000 regras de publicação e `save_product_structure` (EPIC 02). Próxima: imagens (EPIC 03).
+20261104120000 store_settings/admins/RLS (EPIC 01); 20261105100000 categories/products; 20261113100000 options/values/variants; 20261113200000 regras de publicação e `save_product_structure` (EPIC 02); 20261114100000 fotos, bucket e `no_images` (EPIC 03).

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { anonClient, createAdmin, deleteUser, serviceClient, type TestUser } from "./helpers";
+import { addImage, anonClient, createAdmin, deleteUser, serviceClient, type TestUser } from "./helpers";
 
 let admin: TestUser;
 const createdProducts: string[] = [];
@@ -25,7 +25,10 @@ async function insertOne(table: string, row: Record<string, unknown>) {
   return data;
 }
 
-const publish = (id: string) => db().from("products").update({ status: "published" }).eq("id", id);
+const publish = async (id: string) => {
+  await addImage(id);
+  return db().from("products").update({ status: "published" }).eq("id", id);
+};
 
 /** Produto simples com a variante padrão. */
 async function seedSimple() {
@@ -134,6 +137,16 @@ describe("publicar produto (BR-016, sem foto)", () => {
     expect((await db().from("products").update({ name: "Novo" }).eq("id", archived.id)).error).toBeNull();
   });
 
+  it("rejeita publicar sem foto e aceita com foto (BR-016)", async () => {
+    const product = await seedSimple();
+    const denied = await db().from("products").update({ status: "published" }).eq("id", product.id);
+    expect(denied.error?.message).toMatch(/no_images/);
+
+    await addImage(product.id);
+    const allowed = await db().from("products").update({ status: "published" }).eq("id", product.id);
+    expect(allowed.error).toBeNull();
+  });
+
   it("a mensagem lista todas as pendências", async () => {
     const product = await seedProduct();
     await insertOne("product_options", { product_id: product.id, name: "Cor", code: "cor" });
@@ -190,6 +203,20 @@ describe("produto publicado continua válido (validação contínua)", () => {
     expect(error).toBeNull();
   });
 
+  it("rejeita excluir a última foto de produto publicado", async () => {
+    const product = await publishedSimple();
+    const { error } = await db().from("product_images").delete().eq("product_id", product.id);
+    expect(error?.message).toMatch(/no_images/);
+  });
+
+  it("permite excluir uma foto se sobrar outra", async () => {
+    const product = await publishedSimple();
+    await addImage(product.id);
+    const { data } = await db().from("product_images").select("id").eq("product_id", product.id);
+    const { error } = await db().from("product_images").delete().eq("id", data![0].id);
+    expect(error).toBeNull();
+  });
+
   it("permite excluir o produto publicado (cascata)", async () => {
     const d = await publishedDress();
     const { data, error } = await admin.client
@@ -216,8 +243,12 @@ describe("product_publication_issues", () => {
 
     const missing = await admin.client.rpc("product_publication_issues", { p_product_id: empty.id });
     expect(missing.error).toBeNull();
-    expect(missing.data).toEqual(["no_variants"]);
+    expect(missing.data).toEqual(["no_variants", "no_images"]);
 
+    const noPhoto = await admin.client.rpc("product_publication_issues", { p_product_id: ready.id });
+    expect(noPhoto.data).toEqual(["no_images"]);
+
+    await addImage(ready.id);
     const ok = await admin.client.rpc("product_publication_issues", { p_product_id: ready.id });
     expect(ok.data).toEqual([]);
   });

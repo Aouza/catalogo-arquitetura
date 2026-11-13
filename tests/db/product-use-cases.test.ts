@@ -13,6 +13,7 @@ import {
   deleteUser,
   serviceClient,
   type TestUser,
+  addImage,
 } from "./helpers";
 
 let admin: TestUser;
@@ -21,7 +22,7 @@ const createdProducts: string[] = [];
 
 const unique = (prefix: string) => `${prefix}-${randomUUID().slice(0, 8)}`;
 
-async function newProduct(overrides: Record<string, unknown> = {}) {
+async function newProduct(overrides: Record<string, unknown> = {}, withImage = true) {
   const result = await createProduct(admin.client, {
     name: "Vestido Floral",
     basePriceCents: 7990,
@@ -30,6 +31,7 @@ async function newProduct(overrides: Record<string, unknown> = {}) {
   });
   if (!result.ok) throw new Error(result.error.message);
   createdProducts.push(result.data.id);
+  if (withImage) await addImage(result.data.id);
   return result.data;
 }
 

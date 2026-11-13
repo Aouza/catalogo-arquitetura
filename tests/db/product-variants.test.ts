@@ -7,6 +7,7 @@ import {
   deleteUser,
   serviceClient,
   type TestUser,
+  addImage,
 } from "./helpers";
 
 let admin: TestUser;
@@ -67,6 +68,7 @@ async function seedVariant(productId: string, valueIds: string[], extra = {}) {
 
 /** Publica o produto (exige ao menos uma variante válida, migration 3/3). */
 async function publish(productId: string) {
+  await addImage(productId);
   const { error } = await db().from("products").update({ status: "published" }).eq("id", productId);
   if (error) throw new Error(error.message);
 }

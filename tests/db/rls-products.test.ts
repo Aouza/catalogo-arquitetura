@@ -7,6 +7,7 @@ import {
   deleteUser,
   serviceClient,
   type TestUser,
+  addImage,
 } from "./helpers";
 
 let admin: TestUser;
@@ -46,6 +47,7 @@ async function seedProduct(status: "draft" | "published" | "archived", extra = {
   if (status === "published") {
     const variant = await serviceClient().from("product_variants").insert({ product_id: data.id });
     if (variant.error) throw new Error(variant.error.message);
+    await addImage(data.id);
     const published = await serviceClient()
       .from("products")
       .update({ status: "published" })
