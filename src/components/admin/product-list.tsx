@@ -1,4 +1,6 @@
+import { ButtonLink } from "@/components/ui/button-link";
 import { formatPrice } from "@/lib/format";
+import { routes } from "@/lib/routes";
 import type { CategoryOption } from "@/modules/categories/list-categories";
 import type { AdminProductListItem } from "@/modules/products/list-products";
 import { StatusBadge } from "./status-badge";
@@ -74,6 +76,7 @@ export function ProductList({
           </dl>
 
           <div className="mt-4 flex flex-wrap items-start gap-2">
+            <ButtonLink href={routes.adminProduct(product.id)}>Editar</ButtonLink>
             {ACTIONS[product.status].map((intent) => (
               <form key={intent} action={changeStatus}>
                 <input type="hidden" name="id" value={product.id} />

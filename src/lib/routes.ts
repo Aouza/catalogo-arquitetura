@@ -10,4 +10,7 @@ export const routes = {
   login: () => "/login",
   admin: () => "/admin",
   adminProducts: () => "/admin/produtos",
+  adminProductNew: () => "/admin/produtos/novo",
+  adminProduct: (productId: string) => `/admin/produtos/${seg(productId)}`,
+  adminProductOptions: (productId: string) => `/admin/produtos/${seg(productId)}/opcoes`,
 };
