@@ -21,12 +21,13 @@
 - Não criar código ou migrações só porque a documentação contém exemplos ilustrativos.
 
 ## Comunicação das entregas
-Sempre que informar o que foi entregue e o que será feito, seja objetivo e use linguagem simples, como numa apresentação para um investidor. Vale para respostas no chat e também para descrições de Pull Request.
+Seja objetivo, use linguagem simples (como numa apresentação para um investidor) e gaste o mínimo de tokens. Vale para o chat e para descrições de Pull Request.
 - Diga primeiro o resultado e o valor para o negócio ("o que o lojista ou o cliente passa a poder fazer"), depois o próximo passo.
-- Frases curtas, sem jargão técnico desnecessário; se um termo técnico for inevitável, explique em poucas palavras.
-- Detalhes técnicos (arquivos, testes, riscos, decisões) vêm depois, resumidos, para quem quiser conferir.
-- Peça decisões de forma direta, com a recomendação e o impacto de cada opção.
-- Descrição de PR: começar com "O que muda para o negócio" (2 a 4 linhas), seguido de "Detalhes técnicos" (resumo, pontos de atenção e testes).
+- Frases curtas, sem jargão; se um termo técnico for inevitável, explique em poucas palavras.
+- **Não exiba** tabelas de arquivos, listas de funções, trechos de código, nomes de migrations ou detalhes de implementação. Isso só aparece se o usuário pedir.
+- Plano antes de mudar: no máximo 3 a 5 linhas (o que será feito, riscos que importam e decisões pendentes). Relato depois: o que foi entregue, se os testes passaram (sim/não e quantos) e pendências.
+- Decisões: peça de forma direta, com a recomendação e o impacto de cada opção.
+- Descrição de PR: "O que muda para o negócio" (2 a 4 linhas) e "Detalhes técnicos" em no máximo 3 itens curtos (resumo, ponto de atenção, testes).
 
 ## Definition of Done
 Funcionalidade com critérios de aceitação atendidos, validação server-side, autorização testada, estados vazios/erro/loading, responsividade, testes adequados e documentação atualizada.
