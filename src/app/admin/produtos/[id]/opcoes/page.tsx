@@ -69,6 +69,12 @@ async function ProductOptionsPageContent({
             Este produto tem opções personalizadas (diferentes de cor e tamanho) e não pode ser editado nesta tela.
           </p>
         )}
+        <div className="flex justify-between gap-3">
+          <ButtonLink href={routes.adminProduct(data.id)}>← Dados</ButtonLink>
+          <ButtonLink href={routes.adminProductPhotos(data.id)} variant="primary">
+            Próximo: Fotos →
+          </ButtonLink>
+        </div>
       </Container>
     </main>
   );

@@ -58,7 +58,8 @@ Constraint triggers `DEFERRABLE INITIALLY DEFERRED` em `products`, `product_opti
 - Bucket privado `product-images` (5 MB, JPEG/PNG/WebP), arquivos em `<product_id>/<uuid>.<ext>`.
 - Policies em `storage.objects`: admin faz tudo; o público só lê objetos referenciados por uma foto de produto publicado. Órfãos nunca são públicos.
 - `position` é atribuída no fim da galeria por trigger; `reorder_product_images(product_id, ids[])` reordena atomicamente (a lista precisa conter exatamente as fotos do produto).
-- Envio: o app valida tamanho e formato pelo conteúdo, envia o arquivo e registra a foto; se o registro falhar, remove o arquivo. Se a limpeza falhar, ou o produto for excluído, `cleanupOrphanFiles` recolhe os arquivos sem foto cadastrada (ignora arquivos com menos de 10 min). O banco não apaga objetos do Storage.
+- Envio pelo painel: o navegador envia o arquivo direto ao Storage (sessão do admin + RLS), sem passar pelo servidor, para não esbarrar no limite de corpo de requisição das hospedagens (4,5 MB na Vercel). Em seguida o servidor registra a foto (`registerUploadedImage`): confere pasta e nome do arquivo, tamanho e o formato real pelo conteúdo, e remove o arquivo se algo falhar.
+- Envio pelo servidor (`addProductImage`, usado em testes e scripts): valida tamanho e formato pelo conteúdo, envia o arquivo e registra a foto; se o registro falhar, remove o arquivo. Se a limpeza falhar, ou o produto for excluído, `cleanupOrphanFiles` recolhe os arquivos sem foto cadastrada (ignora arquivos com menos de 10 min). O banco não apaga objetos do Storage.
 - Entrega pública (URLs estáveis/cacheáveis para a vitrine e OG) é decidida no EPIC 05/06; hoje o admin usa URLs assinadas.
 
 ## Política de exclusão

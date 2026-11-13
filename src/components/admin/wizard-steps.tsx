@@ -1,21 +1,25 @@
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 
-export type WizardStep = "data" | "options";
+export type WizardStep = "data" | "options" | "photos" | "publish";
 
 const STEPS: { id: WizardStep; label: string }[] = [
   { id: "data", label: "Dados do produto" },
   { id: "options", label: "Cores e tamanhos" },
+  { id: "photos", label: "Fotos" },
+  { id: "publish", label: "Publicar" },
 ];
 
 /**
- * Indicador de passos. O passo 2 só é um link depois que o produto existe (passo 1 salvo).
+ * Indicador de passos. Os demais passos só são links depois que o produto existe (passo 1 salvo).
  * O passo atual é anunciado com `aria-current="step"`.
  */
 export function WizardSteps({ current, productId }: { current: WizardStep; productId?: string }) {
   const hrefs: Record<WizardStep, string | null> = {
     data: productId ? routes.adminProduct(productId) : null,
     options: productId ? routes.adminProductOptions(productId) : null,
+    photos: productId ? routes.adminProductPhotos(productId) : null,
+    publish: productId ? routes.adminProductPublish(productId) : null,
   };
 
   return (

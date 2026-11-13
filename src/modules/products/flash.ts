@@ -10,13 +10,18 @@ export const NOTICE_MESSAGES = {
   archived: "Produto arquivado.",
   reactivated: "Produto reativado como rascunho.",
   deleted: "Produto excluído.",
+  photoUpdated: "Foto atualizada.",
+  photoDeleted: "Foto excluída.",
+  photosReordered: "Ordem das fotos atualizada.",
+  availabilitySaved: "Disponibilidade atualizada.",
 } as const;
 
 export type NoticeKey = keyof typeof NOTICE_MESSAGES;
 
 // Indexada por texto: novos códigos de erro não quebram a compilação; os sem mensagem usam a genérica.
 export const ERROR_MESSAGES: Record<string, string> = {
-  incomplete_product: "Ainda não dá para publicar: complete o cadastro do produto (opções de compra e foto).",
+  incomplete_product:
+    "O produto está incompleto: para ficar no ar ele precisa de ao menos uma opção de compra e uma foto.",
   invalid_transition: "Essa mudança de situação não é permitida agora. Recarregue a página e tente de novo.",
   not_found: "Produto não encontrado. Ele pode ter sido excluído.",
   forbidden: "Você não tem permissão para fazer isso.",
@@ -45,16 +50,20 @@ export function readFlash(raw: RawParams): Flash {
   return null;
 }
 
+// Telas do admin para onde uma ação pode voltar: a lista (com filtros) e os passos de um produto.
+const ID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const RETURN_PATH = new RegExp(
+  `^/admin/produtos(/${ID}(/(opcoes|fotos|publicar))?)?(\\?[^\\\\\\r\\n]*)?$`,
+  "i",
+);
+
 /**
- * Aceita somente caminhos internos da lista de produtos (evita redirecionamento para
- * fora do site). Qualquer outra coisa volta para a lista.
+ * Aceita somente caminhos internos do cadastro de produtos (evita redirecionamento para fora
+ * do site). Qualquer outra coisa volta para a lista.
  */
 export function safeReturnTo(value: unknown): string {
   const fallback = routes.adminProducts();
-  if (typeof value !== "string" || !value.startsWith(fallback)) return fallback;
-  const rest = value.slice(fallback.length);
-  if (rest !== "" && !rest.startsWith("?")) return fallback;
-  if (value.includes("\\") || value.includes("//") || /[\r\n]/.test(value)) return fallback;
+  if (typeof value !== "string" || !RETURN_PATH.test(value) || value.includes("//")) return fallback;
   return value;
 }
 

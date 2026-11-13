@@ -14,6 +14,8 @@ describe("routes", () => {
     expect(routes.adminProductNew()).toBe("/admin/produtos/novo");
     expect(routes.adminProduct("abc")).toBe("/admin/produtos/abc");
     expect(routes.adminProductOptions("abc")).toBe("/admin/produtos/abc/opcoes");
+    expect(routes.adminProductPhotos("abc")).toBe("/admin/produtos/abc/fotos");
+    expect(routes.adminProductPublish("abc")).toBe("/admin/produtos/abc/publicar");
   });
   it("codifica segmentos", () => {
     expect(routes.product("a/b?c")).toBe("/produto/a%2Fb%3Fc");

@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { fail, mapDbError, notFound, ok, type Result } from "@/modules/products/errors";
+import { fail, mapDbError, notFound, type Result } from "@/modules/products/errors";
 import { validationError } from "@/modules/products/schemas";
 import {
   ALLOWED_IMAGE_TYPES,
@@ -11,6 +11,7 @@ import {
   PRODUCT_IMAGES_BUCKET,
 } from "./constants";
 import { detectImageType } from "./file-type";
+import { insertImageRecord } from "./insert-image-record";
 import { mapStorageError } from "./storage-errors";
 import type { ProductImage } from "./types";
 
@@ -80,32 +81,16 @@ export async function addProductImage(
   });
   if (upload.error) return fail(mapStorageError(upload.error));
 
-  const { data, error } = await client
-    .from("product_images")
-    .insert({
-      product_id: productId,
-      option_value_id: optionValueId,
-      storage_path: path,
-      alt_text: altText,
-    })
-    .select("id, product_id, option_value_id, storage_path, alt_text, position")
-    .single();
+  const { result, duplicate } = await insertImageRecord(client, {
+    productId,
+    path,
+    altText,
+    optionValueId,
+  });
 
-  if (error) {
+  if (!result.ok && !duplicate) {
     // Não deixa arquivo órfão; se esta limpeza falhar, a rotina de limpeza recolhe depois.
     await bucket.remove([path]);
-    if (error.code === "23503") {
-      return fail({ code: "validation", message: "A cor escolhida não pertence a este produto." });
-    }
-    return fail(mapDbError(error));
   }
-
-  return ok({
-    id: data.id as string,
-    productId: data.product_id as string,
-    optionValueId: (data.option_value_id as string | null) ?? null,
-    storagePath: data.storage_path as string,
-    altText: data.alt_text as string,
-    position: data.position as number,
-  });
+  return result;
 }
