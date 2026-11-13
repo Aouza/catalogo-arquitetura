@@ -20,6 +20,14 @@
 - Se houver decisão em aberto, perguntar ou registrar em `docs/delivery/OPEN_QUESTIONS.md` antes de assumir.
 - Não criar código ou migrações só porque a documentação contém exemplos ilustrativos.
 
+## Comunicação das entregas
+Sempre que informar o que foi entregue e o que será feito, seja objetivo e use linguagem simples, como numa apresentação para um investidor. Vale para respostas no chat e também para descrições de Pull Request.
+- Diga primeiro o resultado e o valor para o negócio ("o que o lojista ou o cliente passa a poder fazer"), depois o próximo passo.
+- Frases curtas, sem jargão técnico desnecessário; se um termo técnico for inevitável, explique em poucas palavras.
+- Detalhes técnicos (arquivos, testes, riscos, decisões) vêm depois, resumidos, para quem quiser conferir.
+- Peça decisões de forma direta, com a recomendação e o impacto de cada opção.
+- Descrição de PR: começar com "O que muda para o negócio" (2 a 4 linhas), seguido de "Detalhes técnicos" (resumo, pontos de atenção e testes).
+
 ## Definition of Done
 Funcionalidade com critérios de aceitação atendidos, validação server-side, autorização testada, estados vazios/erro/loading, responsividade, testes adequados e documentação atualizada.
 
