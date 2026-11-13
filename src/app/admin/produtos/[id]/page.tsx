@@ -57,6 +57,11 @@ async function EditProductPageContent({ params }: { params: Promise<{ id: string
             slug: "",
           }}
         />
+        <div className="flex justify-end">
+          <ButtonLink href={routes.adminProductOptions(data.id)} variant="primary">
+            Próximo: Cores e tamanhos →
+          </ButtonLink>
+        </div>
       </Container>
     </main>
   );

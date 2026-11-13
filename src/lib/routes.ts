@@ -13,4 +13,6 @@ export const routes = {
   adminProductNew: () => "/admin/produtos/novo",
   adminProduct: (productId: string) => `/admin/produtos/${seg(productId)}`,
   adminProductOptions: (productId: string) => `/admin/produtos/${seg(productId)}/opcoes`,
+  adminProductPhotos: (productId: string) => `/admin/produtos/${seg(productId)}/fotos`,
+  adminProductPublish: (productId: string) => `/admin/produtos/${seg(productId)}/publicar`,
 };
