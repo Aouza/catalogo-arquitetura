@@ -11,13 +11,16 @@
 | `categories` | id, name, slug, position | slug único |
 | `products` | id, category_id nullable, slug, name, description, base_price_cents bigint, status, created_at, updated_at | slug único; base_price >= 0 |
 | `product_options` | id, product_id, name, code, position | UNIQUE(product_id,code) |
-| `product_option_values` | id, option_id, label, code, position | UNIQUE(option_id,code) |
+| `product_option_values` | id, option_id, product_id (denormalizado), label, code, position | UNIQUE(option_id,code); FK composta (option_id,product_id) |
 | `product_variants` | id, product_id, combination_key, price_override_cents nullable, is_available, position | UNIQUE(product_id,combination_key); override >= 0 |
-| `variant_option_values` | variant_id, option_value_id | PK(variant_id,option_value_id); validar produto e uma escolha por opção |
+| `variant_option_values` | variant_id, option_value_id, product_id, option_id (os dois últimos preenchidos por trigger a partir do valor) | PK(variant_id,option_value_id); UNIQUE(variant_id,option_id); FKs compostas impedem cruzar produtos; sem UPDATE |
 | `product_images` | id, product_id, option_value_id nullable, storage_path, alt_text, position, created_at | valor de opção deve pertencer ao produto |
 
+## Combinação das variantes
+`combination_key` é calculada por trigger (nunca vem do cliente): ids dos valores vinculados, ordenados e separados por vírgula; `''` identifica a variante padrão de produto simples. Cada vínculo inserido ou removido recalcula a chave, e `UNIQUE(product_id, combination_key)` rejeita duplicatas (BR-022). Consequência: uma variante sem vínculos já ocupa a chave `''`, então as variantes de um produto com opções devem ser completadas uma a uma (inserir variante, inserir seus vínculos, próxima variante). Inserir em lote várias variantes vazias falha; o caso de uso deve ser sequencial e transacional. Completude (um valor por opção) e variante padrão única são verificadas na publicação (migration 005). O preço efetivo (BR-024) é calculado na aplicação.
+
 ## Integridade entre produtos
-Referências de opções, variantes e imagens nunca podem cruzar produtos: usar FKs compostas e/ou triggers transacionais. RLS não substitui constraints de integridade.
+Referências de opções, variantes e imagens nunca podem cruzar produtos: FKs compostas (`product_id` denormalizado) e triggers. `product_id` e `option_id` de opções, valores e variantes são imutáveis após a criação. RLS não substitui constraints de integridade.
 
 ## Autorização
 `is_admin()` (`SECURITY DEFINER`, `search_path` fixo, `EXECUTE` revogado de `PUBLIC`) consulta `admins` e é usada pelas policies, evitando recursão de RLS. Leitura pública: apenas dados publicados. Escrita: somente admin.
