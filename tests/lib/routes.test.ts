@@ -11,6 +11,9 @@ describe("routes", () => {
     expect(routes.login()).toBe("/login");
     expect(routes.admin()).toBe("/admin");
     expect(routes.adminProducts()).toBe("/admin/produtos");
+    expect(routes.adminProductNew()).toBe("/admin/produtos/novo");
+    expect(routes.adminProduct("abc")).toBe("/admin/produtos/abc");
+    expect(routes.adminProductOptions("abc")).toBe("/admin/produtos/abc/opcoes");
   });
   it("codifica segmentos", () => {
     expect(routes.product("a/b?c")).toBe("/produto/a%2Fb%3Fc");
