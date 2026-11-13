@@ -17,7 +17,7 @@
 | `product_images` | id, product_id, option_value_id nullable, storage_path, alt_text, position, created_at | valor de opção deve pertencer ao produto |
 
 ## Combinação das variantes
-`combination_key` é calculada por trigger (nunca vem do cliente): ids dos valores vinculados, ordenados e separados por vírgula; `''` identifica a variante padrão de produto simples. Cada vínculo inserido ou removido recalcula a chave, e `UNIQUE(product_id, combination_key)` rejeita duplicatas (BR-022). Consequência: uma variante sem vínculos já ocupa a chave `''`, então as variantes de um produto com opções devem ser completadas uma a uma (inserir variante, inserir seus vínculos, próxima variante). Inserir em lote várias variantes vazias falha; o caso de uso deve ser sequencial e transacional. Completude (um valor por opção) e variante padrão única são verificadas na publicação (migration 005). O preço efetivo (BR-024) é calculado na aplicação.
+`combination_key` é calculada por trigger (nunca vem do cliente): ids dos valores vinculados, ordenados e separados por vírgula; `''` identifica a variante padrão de produto simples. Cada vínculo inserido ou removido recalcula a chave, e `UNIQUE(product_id, combination_key)` rejeita duplicatas (BR-022). Consequência: uma variante sem vínculos já ocupa a chave `''`, então as variantes de um produto com opções devem ser completadas uma a uma (inserir variante, inserir seus vínculos, próxima variante). Inserir em lote várias variantes vazias falha; o caso de uso deve ser sequencial e transacional. Completude (um valor por opção) e variante padrão única são verificadas na publicação (ver "Regras de publicação"). O preço efetivo (BR-024) é calculado na aplicação.
 
 ## Integridade entre produtos
 Referências de opções, variantes e imagens nunca podem cruzar produtos: FKs compostas (`product_id` denormalizado) e triggers. `product_id` e `option_id` de opções, valores e variantes são imutáveis após a criação. RLS não substitui constraints de integridade.
@@ -38,6 +38,22 @@ Referências de opções, variantes e imagens nunca podem cruzar produtos: FKs c
 ## Regras de armazenamento
 BRL em centavos com `BIGINT` e CHECK >= 0; timestamps UTC (`timestamptz`); UUIDs; não usar float para dinheiro. Slugs case-normalizados. Caminhos de imagens armazenados no banco; URL de entrega derivada conforme política de bucket.
 
+## Regras de publicação (BR-016, BR-021)
+`product_publication_issues(product_id)` devolve as pendências (`no_variants`, `option_without_values`, `incomplete_variants`); lista vazia = publicável. Nome, slug e preço já são garantidos por constraints de `products`. **Foto não é exigida ainda:** entra no EPIC 03 acrescentando `no_images` nessa função.
+
+Constraint triggers `DEFERRABLE INITIALLY DEFERRED` em `products`, `product_options`, `product_option_values`, `product_variants` e `variant_option_values` revalidam no COMMIT todo produto `published`, por qualquer caminho de escrita (inclusive service role). Consequências:
+- Não é possível publicar produto inválido, nem deixar inválido um produto já publicado (ex.: excluir a última variante ou um vínculo).
+- Dentro de uma transação, estados intermediários são permitidos; o resultado final precisa ser válido, senão a transação inteira é desfeita.
+- Fora de uma função SQL, cada chamada do PostgREST é uma transação própria. Por isso a edição estrutural de produto publicado deve usar `save_product_structure`.
+- Excluir o produto (cascata) não dispara erro de validação.
+
+## Edição transacional da estrutura
+`save_product_structure(p_product_id, p_options jsonb, p_variants jsonb)` (SECURITY INVOKER, só `authenticated`, exige `is_admin()`): sincroniza opções, valores e variantes de um produto numa única transação, inclusive publicado, sem despublicar.
+- Opções e valores são casados por `code`; variantes pelo conjunto de valores. Quem permanece mantém o mesmo id (as fotos de cor do EPIC 03 apontam para o valor de opção, e não podem ser perdidas numa edição).
+- O que não está no payload é removido (cascata para valores e vínculos). Uma variante cuja combinação muda é recriada.
+- Payload: `options: [{code, name, position?, values: [{code, label, position?}]}]`; `variants: [{values: {optionCode: valueCode}, price_override_cents?, is_available?, position?}]`. Produto simples: `options: []` e uma variante com `values: {}`.
+- Rejeita payload malformado, códigos duplicados, combinação duplicada, variante incompleta ou com valor desconhecido; os limites de BR-017 e a validação de publicação do COMMIT continuam valendo.
+
 ## Política de exclusão
 O admin pode excluir qualquer produto (BR-015): `DELETE` em `products` permitido só a `is_admin()`, com `ON DELETE CASCADE` para opções, valores, variantes, vínculos e imagens. A limpeza dos arquivos no Storage é responsabilidade do fluxo de mídia (EPIC 03), pois o banco não apaga objetos do Storage. `products.category_id` usa `ON DELETE SET NULL`: excluir categoria não apaga produtos. Arquivar continua sendo a alternativa que preserva o produto.
 
@@ -45,4 +61,4 @@ O admin pode excluir qualquer produto (BR-015): `DELETE` em `products` permitido
 Triggers validam no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes por produto.
 
 ## Migrações
-001 store_settings/admins/RLS (EPIC 01); 002 categories/products; 003 options/values/variants; 004 images; 005 funções de consistência e publicação (sequência ilustrativa, ajustar para dependências).
+20261104120000 store_settings/admins/RLS (EPIC 01); 20261105100000 categories/products; 20261113100000 options/values/variants; 20261113200000 regras de publicação e `save_product_structure` (EPIC 02). Próxima: imagens (EPIC 03).

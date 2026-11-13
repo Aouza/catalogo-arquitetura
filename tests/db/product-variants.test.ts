@@ -16,10 +16,10 @@ const createdProducts: string[] = [];
 const slug = (prefix: string) => `${prefix}-${randomUUID().slice(0, 8)}`;
 const db = () => serviceClient();
 
-async function seedProduct(status: "draft" | "published" = "draft", base = 7990) {
+async function seedProduct(base = 7990) {
   const { data, error } = await db()
     .from("products")
-    .insert({ slug: slug("prod"), name: "Vestido", base_price_cents: base, status })
+    .insert({ slug: slug("prod"), name: "Vestido", base_price_cents: base })
     .select()
     .single();
   if (error) throw new Error(error.message);
@@ -65,9 +65,15 @@ async function seedVariant(productId: string, valueIds: string[], extra = {}) {
   return { variant: fresh!, error: null };
 }
 
+/** Publica o produto (exige ao menos uma variante válida, migration 3/3). */
+async function publish(productId: string) {
+  const { error } = await db().from("products").update({ status: "published" }).eq("id", productId);
+  if (error) throw new Error(error.message);
+}
+
 /** Produto com cor (rosa, azul) e tamanho (2, 4). */
-async function seedDress(status: "draft" | "published" = "draft") {
-  const product = await seedProduct(status);
+async function seedDress() {
+  const product = await seedProduct();
   const color = await seedOption(product.id, "cor");
   const size = await seedOption(product.id, "tamanho");
   const rosa = await seedValue(color.id, product.id, "rosa");
@@ -245,12 +251,12 @@ describe("limites por produto (BR-017)", () => {
 
 describe("preço (BR-013, BR-024)", () => {
   it("override zero é válido e distinto de null", async () => {
-    const product = await seedProduct("draft", 5000);
+    const product = await seedProduct(5000);
     const zero = await seedVariant(product.id, [], { price_override_cents: 0 });
     expect(zero.error).toBeNull();
     expect(zero.variant!.price_override_cents).toBe(0);
 
-    const inherit = await seedProduct("draft", 5000);
+    const inherit = await seedProduct(5000);
     const nul = await seedVariant(inherit.id, []);
     expect(nul.variant!.price_override_cents).toBeNull();
   });
@@ -264,10 +270,11 @@ describe("preço (BR-013, BR-024)", () => {
 
 describe("visibilidade e escrita (RLS)", () => {
   it("público lê opções, valores e variantes só de produto publicado", async () => {
-    const pub = await seedDress("published");
-    const draft = await seedDress("draft");
+    const pub = await seedDress();
+    const draft = await seedDress();
     await seedVariant(pub.product.id, [pub.rosa.id, pub.t2.id]);
     await seedVariant(draft.product.id, [draft.rosa.id, draft.t2.id]);
+    await publish(pub.product.id);
     const ids = [pub.product.id, draft.product.id];
 
     for (const client of [anonClient(), plainUser.client]) {
@@ -280,7 +287,7 @@ describe("visibilidade e escrita (RLS)", () => {
   });
 
   it("admin lê tudo, inclusive rascunho", async () => {
-    const draft = await seedDress("draft");
+    const draft = await seedDress();
     const { data } = await admin.client
       .from("product_option_values")
       .select("id")
@@ -289,7 +296,9 @@ describe("visibilidade e escrita (RLS)", () => {
   });
 
   it("anônimo e usuário comum não escrevem", async () => {
-    const d = await seedDress("published");
+    const d = await seedDress();
+    await seedVariant(d.product.id, [d.rosa.id, d.t2.id]);
+    await publish(d.product.id);
     for (const client of [anonClient(), plainUser.client]) {
       expect(
         (await client.from("product_options").insert({ product_id: d.product.id, name: "x", code: "x" })).error,
