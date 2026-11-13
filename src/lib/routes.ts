@@ -9,4 +9,5 @@ export const routes = {
   product: (productSlug: string) => `/produto/${seg(productSlug)}`,
   login: () => "/login",
   admin: () => "/admin",
+  adminProducts: () => "/admin/produtos",
 };

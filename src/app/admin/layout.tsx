@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { AdminHeader } from "@/components/admin/admin-header";
 import { requireAdmin } from "@/modules/auth/require-admin";
 
 export const metadata: Metadata = {
@@ -12,7 +13,12 @@ export const metadata: Metadata = {
 // não re-renderizam a cada navegação, então esta checagem não basta sozinha.
 async function AdminGate({ children }: { children: React.ReactNode }) {
   await requireAdmin();
-  return <>{children}</>;
+  return (
+    <>
+      <AdminHeader />
+      {children}
+    </>
+  );
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
