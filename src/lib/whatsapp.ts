@@ -11,3 +11,9 @@ export function instagramUrl(handle: string): string | null {
   const name = handle.trim().replace(/^@/, "");
   return INSTAGRAM_HANDLE.test(name) ? `https://instagram.com/${name}` : null;
 }
+
+/** Link do WhatsApp com a mensagem já escrita (codificada para URL). `null` se o número for inválido. */
+export function whatsappMessageLink(value: string | null | undefined, message: string): string | null {
+  const base = whatsappLink(value);
+  return base ? `${base}?text=${encodeURIComponent(message)}` : null;
+}
