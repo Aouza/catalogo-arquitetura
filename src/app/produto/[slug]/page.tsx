@@ -7,13 +7,12 @@ import { routes } from "@/lib/routes";
 import { siteUrl } from "@/lib/site";
 import { parseSelection } from "@/modules/catalogs/product-detail";
 import { getProductPage } from "@/modules/catalogs/queries/get-product-page";
+import { defaultShareImage, shareMetadata, summarize } from "@/modules/catalogs/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-
-const DESCRIPTION_LIMIT = 160;
 
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { slug } = await params;
@@ -21,24 +20,18 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
   if (result.status === "not-found") return { title: "Página não encontrada", robots: { index: false } };
 
   const { store, detail } = result.view;
-  const description =
-    detail.description.trim().slice(0, DESCRIPTION_LIMIT) || `${detail.name} na ${store.name}. Veja as opções e fale pelo WhatsApp.`;
-  // A prévia do link (WhatsApp, Instagram) usa a primeira foto; a escolha da URL não muda o endereço oficial.
+  // A prévia do link (WhatsApp, Instagram) usa a foto geral (ou a primeira); a escolha de cor e
+  // tamanho da URL não muda o endereço oficial da página.
   const cover = detail.images.find((image) => image.optionValueId === null) ?? detail.images[0];
 
-  return {
-    title: detail.name,
-    description,
-    alternates: { canonical: routes.product(detail.slug) },
-    openGraph: {
-      title: `${detail.name} · ${store.name}`,
-      description,
-      type: "website",
-      locale: "pt_BR",
-      url: routes.product(detail.slug),
-      ...(cover ? { images: [{ url: cover.path, alt: cover.alt || detail.name }] } : {}),
-    },
-  };
+  return shareMetadata({
+    title: `${detail.name} · ${store.name}`,
+    description:
+      summarize(detail.description) || `${detail.name} na ${store.name}. Veja as opções e fale pelo WhatsApp.`,
+    path: routes.product(detail.slug),
+    siteName: store.name,
+    image: cover ? { url: cover.path, alt: cover.alt || detail.name } : defaultShareImage(),
+  });
 }
 
 async function ProductContent({ params, searchParams }: Props) {
