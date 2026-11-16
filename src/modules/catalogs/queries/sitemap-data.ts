@@ -24,13 +24,13 @@ export async function fetchSitemapData(client: SupabaseClient): Promise<SitemapD
       .order("created_at", { ascending: false })
       .order("id", { ascending: true })
       .range(from, from + PAGE - 1);
-    if (error || !data) break;
+    if (error) throw new Error(`Falha ao ler os produtos do mapa do site: ${error.message}`);
 
-    for (const row of data) {
+    for (const row of data ?? []) {
       products.push({ slug: row.slug as string, updatedAt: row.updated_at as string });
       if (row.category_id) usedCategories.add(row.category_id as string);
     }
-    if (data.length < PAGE) break;
+    if ((data ?? []).length < PAGE) break;
   }
 
   const categories = (await fetchCategories(client)).filter((category) => usedCategories.has(category.id));

@@ -1,4 +1,6 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/public";
+import { STOREFRONT_LIFE, STOREFRONT_TAG } from "../cache";
 import { demoCatalog } from "../fixtures/demo-catalog";
 import type { CatalogTheme } from "../theme/tokens";
 import type { CategoryView, ProductView, StoreInfo } from "../types";
@@ -58,6 +60,10 @@ function fixtureListing(categorySlug?: string): CatalogListingResult {
 export async function getCatalogListing(
   options: { categorySlug?: string; page?: number } = {},
 ): Promise<CatalogListingResult> {
+  "use cache";
+  cacheTag(STOREFRONT_TAG);
+  cacheLife(STOREFRONT_LIFE);
+
   const client = createPublicClient();
   if (!client) return fixtureListing(options.categorySlug);
 

@@ -30,7 +30,8 @@ export async function fetchStore(client: SupabaseClient): Promise<StoreData | nu
     .from("store_settings")
     .select("name, description, whatsapp_e164, instagram, address, hours, logo_path, logo_full_path, theme")
     .maybeSingle();
-  if (error || !data) return null;
+  if (error) throw new Error(`Falha ao ler a loja: ${error.message}`);
+  if (!data) return null;
 
   const row = data as StoreRow;
   return {
@@ -57,9 +58,9 @@ export async function fetchCategories(client: SupabaseClient): Promise<PublicCat
     .select("id, slug, name")
     .order("position", { ascending: true })
     .order("name", { ascending: true });
-  if (error || !data) return [];
+  if (error) throw new Error(`Falha ao ler as categorias: ${error.message}`);
 
-  return data.map((row) => ({
+  return (data ?? []).map((row) => ({
     id: row.id as string,
     slug: row.slug as string,
     name: row.name as string,
@@ -114,7 +115,8 @@ export async function fetchProducts(
   };
 
   const counted = await build(true);
-  const total = counted.error ? 0 : (counted.count ?? 0);
+  if (counted.error) throw new Error(`Falha ao contar os produtos: ${counted.error.message}`);
+  const total = counted.count ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const page = Math.min(Math.max(1, Math.floor(options.page ?? 1)), totalPages);
   if (total === 0) return { items: [], total: 0, page, totalPages };
@@ -124,7 +126,7 @@ export async function fetchProducts(
     .order("created_at", { ascending: false })
     .order("id", { ascending: true })
     .range(from, from + pageSize - 1);
-  if (error || !data) return { items: [], total, page, totalPages };
+  if (error) throw new Error(`Falha ao ler os produtos: ${error.message}`);
 
-  return { items: (data as unknown as StorefrontRow[]).map(toProductView), total, page, totalPages };
+  return { items: ((data ?? []) as unknown as StorefrontRow[]).map(toProductView), total, page, totalPages };
 }

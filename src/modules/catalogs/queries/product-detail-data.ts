@@ -19,7 +19,8 @@ export async function fetchProductDetail(client: SupabaseClient, slug: string): 
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
-  if (error || !product) return null;
+  if (error) throw new Error(`Falha ao ler o produto: ${error.message}`);
+  if (!product) return null;
 
   const productId = product.id as string;
   const [options, values, variants, links, images] = await Promise.all([
@@ -34,7 +35,8 @@ export async function fetchProductDetail(client: SupabaseClient, slug: string): 
       .order("position", { ascending: true })
       .order("created_at", { ascending: true }),
   ]);
-  if (options.error || values.error || variants.error || links.error || images.error) return null;
+  const failure = [options, values, variants, links, images].find((result) => result.error);
+  if (failure?.error) throw new Error(`Falha ao ler os detalhes do produto: ${failure.error.message}`);
 
   const base = Number(product.base_price_cents);
   const optionRows = [...(options.data ?? [])].sort(byPosition);
