@@ -1,4 +1,6 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { createPublicClient } from "@/lib/supabase/public";
+import { STOREFRONT_LIFE, STOREFRONT_TAG } from "../cache";
 import { defaultHero } from "../default-hero";
 import { demoCatalog, type FixtureCatalog } from "../fixtures/demo-catalog";
 import type { CatalogHomeView, ProductView } from "../types";
@@ -37,6 +39,10 @@ function fixtureHome(): CatalogHomeView | null {
 
 /** Home da vitrine com os produtos publicados; `null` se a loja não está configurada. */
 export async function getCatalogHome(): Promise<CatalogHomeView | null> {
+  "use cache";
+  cacheTag(STOREFRONT_TAG);
+  cacheLife(STOREFRONT_LIFE);
+
   const client = createPublicClient();
   if (!client) return fixtureHome();
 

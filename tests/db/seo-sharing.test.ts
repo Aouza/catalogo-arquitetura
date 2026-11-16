@@ -1,13 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { anonClient, serviceClient } from "./helpers";
 import { fetchSitemapData } from "@/modules/catalogs/queries/sitemap-data";
-
-// `connection()` só funciona dentro de um pedido real do Next; aqui só interessa o conteúdo do mapa.
-vi.mock("next/server", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("next/server")>()),
-  connection: async () => {},
-}));
 
 const previousEnv = {
   url: process.env.NEXT_PUBLIC_SUPABASE_URL,

@@ -8,6 +8,7 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    setupFiles: ["tests/setup/next-cache.ts"],
     include: ["tests/db/**/*.test.ts"],
     fileParallelism: false,
     testTimeout: 20_000,
