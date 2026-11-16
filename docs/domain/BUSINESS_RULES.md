@@ -25,7 +25,7 @@
 - **BR-024** Preço efetivo = `price_override_cents ?? base_price_cents`; zero é diferente de `null`.
 - **BR-025** Opções/valores associados a uma variação devem pertencer ao mesmo produto.
 - **BR-026** Não oferecer CTA de interesse como disponível para variação indisponível.
-- **BR-027** Se nenhuma variação estiver disponível, o produto pode continuar publicado com indicação de indisponibilidade.
+- **BR-027** Se nenhuma variação estiver disponível, o produto continua publicado e aparece na listagem com o selo "Indisponível" (OQ-09).
 - **BR-028** Gerar combinações no admin não significa publicar todas; administrador revisa e confirma combinações válidas.
 
 ## Imagens
@@ -36,7 +36,7 @@
 
 ## Contato
 - **BR-040** Mensagem WhatsApp contém produto, valores selecionados, preço efetivo exibido e URL canônica.
-- **BR-041** Mensagem só é montada com combinação válida; preço/disponibilidade são informativos e sujeitos à confirmação pelo vendedor.
+- **BR-041** Mensagem só é montada com combinação válida; preço/disponibilidade são informativos e sujeitos à confirmação pelo vendedor. O botão do WhatsApp exige que o visitante tenha escolhido todas as opções do produto (cor e tamanho, quando houver) e que a combinação esteja disponível (OQ-08).
 - **BR-042** Não criar pedido, reserva ou pagamento ao clicar no WhatsApp.
 
 ## Integridade

@@ -18,7 +18,10 @@ export type CategoryView = { slug: string; name: string; imageUrl?: string };
 export type ProductView = {
   slug: string;
   name: string;
+  /** Preço exibido no card: o de partida (menor preço efetivo entre as combinações). */
   basePriceCents: number;
+  /** Há combinações com preços diferentes: o card mostra "A partir de". */
+  priceVaries?: boolean;
   imageUrl?: string;
   imageAlt: string;
   isAvailable: boolean;

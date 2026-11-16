@@ -1,14 +1,17 @@
+import { createPublicClient } from "@/lib/supabase/public";
+import { defaultHero } from "../default-hero";
 import { demoCatalog, type FixtureCatalog } from "../fixtures/demo-catalog";
 import type { CatalogHomeView, ProductView } from "../types";
+import { fetchCategories, fetchProducts, fetchStore, HOME_PRODUCT_COUNT } from "./storefront-data";
 
-// Troque esta função por leitura do Supabase mantendo o contrato de CatalogHomeView.
-function findCatalog(): FixtureCatalog | null {
+// Sem Supabase configurado, só o ambiente de desenvolvimento mostra o catálogo de exemplo.
+function fixtureCatalog(): FixtureCatalog | null {
   if (process.env.NODE_ENV === "production") return null;
   return demoCatalog;
 }
 
-export async function getCatalogHome(): Promise<CatalogHomeView | null> {
-  const catalog = findCatalog();
+function fixtureHome(): CatalogHomeView | null {
+  const catalog = fixtureCatalog();
   if (!catalog) return null;
 
   const products: ProductView[] = catalog.products
@@ -29,5 +32,27 @@ export async function getCatalogHome(): Promise<CatalogHomeView | null> {
     categories: catalog.categories,
     productsOrder: "published_at",
     products,
+  };
+}
+
+/** Home da vitrine com os produtos publicados; `null` se a loja não está configurada. */
+export async function getCatalogHome(): Promise<CatalogHomeView | null> {
+  const client = createPublicClient();
+  if (!client) return fixtureHome();
+
+  const [storeData, categories, products] = await Promise.all([
+    fetchStore(client),
+    fetchCategories(client),
+    fetchProducts(client, { pageSize: HOME_PRODUCT_COUNT }),
+  ]);
+  if (!storeData) return null;
+
+  return {
+    store: storeData.store,
+    theme: storeData.theme,
+    hero: defaultHero,
+    categories: categories.map(({ slug, name, imageUrl }) => ({ slug, name, imageUrl })),
+    productsOrder: "published_at",
+    products: products.items,
   };
 }
