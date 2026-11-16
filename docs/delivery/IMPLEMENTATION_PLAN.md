@@ -20,6 +20,7 @@
 
 ## EPIC 04 — Admin
 - Listagem, filtros básicos, cadastro guiado, revisão de combinações, publicação e disponibilidade.
+- Cadastro de categorias (criar, renomear, reordenar, excluir), RF-08.
 **Aceite:** usuário cadastra vestido com duas cores e dois tamanhos sem criar combinações uma a uma.
 
 ## EPIC 05 — Vitrine e WhatsApp

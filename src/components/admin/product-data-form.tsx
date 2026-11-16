@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
+import { routes } from "@/lib/routes";
 import type { CategoryOption } from "@/modules/categories/list-categories";
 import type { FormState } from "@/modules/products/admin-product-forms";
 
@@ -122,6 +124,15 @@ export function ProductDataForm({
             </option>
           ))}
         </select>
+        {categories.length === 0 ? (
+          <p className={hint}>
+            Nenhuma categoria cadastrada ainda.{" "}
+            <Link href={routes.adminCategories()} className="font-semibold text-action underline">
+              Cadastre em Categorias
+            </Link>
+            .
+          </p>
+        ) : null}
       </div>
 
       <details className="rounded-card border border-border bg-surface-subtle p-4" open={Boolean(errors.slug)}>
