@@ -3,24 +3,28 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CatalogHome } from "@/components/storefront/catalog-home";
 import { HomeSkeleton } from "@/components/storefront/home-skeleton";
+import { routes } from "@/lib/routes";
 import { getCatalogHome } from "@/modules/catalogs/queries/get-catalog-home";
+import { shareMetadata, summarize } from "@/modules/catalogs/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const home = await getCatalogHome();
   if (!home) return { title: "Página não encontrada", robots: { index: false } };
 
-  const { store } = home;
-  return {
+  const { store, hero } = home;
+  const image = hero?.imageUrl
+    ? { url: hero.imageUrl, alt: hero.imageAlt ?? store.name }
+    : store.logoUrl
+      ? { url: store.logoUrl, alt: store.name }
+      : undefined;
+
+  return shareMetadata({
     title: store.name,
-    description: store.description,
-    openGraph: {
-      title: store.name,
-      description: store.description,
-      type: "website",
-      locale: "pt_BR",
-      ...(store.logoUrl ? { images: [store.logoUrl] } : {}),
-    },
-  };
+    description: summarize(store.description) || store.name,
+    path: routes.home(),
+    siteName: store.name,
+    image,
+  });
 }
 
 async function CatalogHomeContent() {

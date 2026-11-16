@@ -365,7 +365,7 @@ describe("a visão da vitrine expõe só o necessário", () => {
     await seedProduct({ categoryId: category.id });
     const { data } = await anonClient().from("storefront_products").select("*").eq("category_id", category.id);
     expect(Object.keys(data![0]).sort()).toEqual(
-      ["category_id", "cover_alt", "cover_path", "created_at", "id", "is_available", "name", "price_cents", "price_varies", "slug"].sort(),
+      ["category_id", "cover_alt", "cover_path", "created_at", "id", "is_available", "name", "price_cents", "price_varies", "slug", "updated_at"].sort(),
     );
   });
 });
