@@ -6,8 +6,9 @@ import { routes } from "@/lib/routes";
 import { whatsappLink } from "@/lib/whatsapp";
 import type { CategoryView, StoreInfo } from "@/modules/catalogs/types";
 import { CategoryDrawer } from "./category-drawer";
-import { SearchField } from "./search-field";
 
+// A busca por texto fica fora do MVP (OQ-10): o campo só volta ao cabeçalho quando a página de
+// busca existir (SearchField já está pronto em ./search-field).
 export function SiteHeader({ store, categories }: { store: StoreInfo; categories: CategoryView[] }) {
   const whatsapp = whatsappLink(store.whatsappE164);
   return (
@@ -58,16 +59,13 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
             ))}
           </ul>
         </nav>
-        <div className="ml-auto hidden w-64 lg:block">
-          <SearchField id="search-desktop" />
-        </div>
         {whatsapp ? (
           <a
             href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Conversar pelo WhatsApp"
-            className="grid size-11 place-items-center text-fg hover:text-action"
+            className="ml-auto grid size-11 place-items-center text-fg hover:text-action"
           >
             <WhatsAppOutlineIcon />
           </a>
@@ -75,11 +73,6 @@ export function SiteHeader({ store, categories }: { store: StoreInfo; categories
           <span aria-hidden="true" className="size-11 lg:hidden" />
         )}
       </Container>
-      <div className="pb-3 lg:hidden">
-        <Container>
-          <SearchField id="search-mobile" />
-        </Container>
-      </div>
     </header>
   );
 }
