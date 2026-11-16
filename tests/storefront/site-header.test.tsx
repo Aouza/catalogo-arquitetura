@@ -11,12 +11,14 @@ describe("SiteHeader", () => {
     expect(html).toContain("Loja Exemplo");
     expect(html).toContain('href="/"');
   });
-  it("tem busca GET para a rota de busca, com label", () => {
-    const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
-    expect(html).toContain('action="/busca"');
-    expect(html).toContain('name="q"');
-    expect(html).toContain('placeholder="Buscar produtos..."');
-    expect(html).toMatch(/<label[^>]*>Buscar produtos<\/label>/);
+  it("não mostra campo de busca (a busca fica fora do MVP e a página /busca não existe)", () => {
+    const html = renderToStaticMarkup(
+      <SiteHeader store={{ ...store, whatsappE164: "+5511999990000" }} categories={categories} />,
+    );
+    expect(html).not.toContain("/busca");
+    expect(html).not.toContain('type="search"');
+    expect(html).not.toContain('role="search"');
+    expect(html).not.toMatch(/Buscar produtos/);
   });
   it("só mostra o atalho de WhatsApp com número válido", () => {
     const withWa = renderToStaticMarkup(
@@ -28,6 +30,12 @@ describe("SiteHeader", () => {
       const html = renderToStaticMarkup(<SiteHeader store={{ ...store, whatsappE164: bad }} categories={categories} />);
       expect(html).not.toContain("wa.me");
     }
+  });
+  it("o atalho de WhatsApp fica alinhado à direita", () => {
+    const html = renderToStaticMarkup(
+      <SiteHeader store={{ ...store, whatsappE164: "+5511999990000" }} categories={categories} />,
+    );
+    expect(html).toMatch(/<a(?=[^>]*wa\.me)(?=[^>]*ml-auto)[^>]*>/);
   });
   it("tem botão de menu nomeado e links de categoria", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
@@ -46,11 +54,10 @@ describe("SiteHeader", () => {
     const html = renderToStaticMarkup(<SiteHeader store={{ ...store, logoUrl: "/c.png" }} categories={categories} />);
     expect(html.match(/<img/g)).toHaveLength(1);
   });
-  it("cabeçalho sem borda inferior e busca em pílula sem borda", () => {
+  it("cabeçalho sem borda inferior", () => {
     const html = renderToStaticMarkup(<SiteHeader store={store} categories={categories} />);
     expect(html).toMatch(/<header[^>]*bg-bg/);
     expect(html).not.toMatch(/<header[^>]*border-b/);
-    expect(html).toContain("rounded-full");
   });
   it("não tem favoritos nem carrinho (fora do MVP)", () => {
     const html = renderToStaticMarkup(
