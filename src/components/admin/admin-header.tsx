@@ -15,6 +15,9 @@ export function AdminHeader() {
           <Link href={routes.adminProducts()} className={linkClass}>
             Produtos
           </Link>
+          <Link href={routes.adminCategories()} className={linkClass}>
+            Categorias
+          </Link>
         </nav>
         <form action={logout}>
           <button type="submit" className={`${linkClass} text-fg-muted`}>

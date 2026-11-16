@@ -17,6 +17,11 @@
 - **BR-016** Publicar exige nome, preço válido, slug, ao menos uma variação válida e ao menos 1 imagem. Um produto publicado não pode ficar sem foto (excluir a última foto é recusado).
 - **BR-017** Limites por produto, validados no banco: no máximo 2 opções, 20 valores (somando as opções) e 100 variantes.
 
+## Categorias
+- **BR-018** O admin cria, renomeia, reordena e exclui categorias. A ordem definida no admin é a ordem exibida na vitrine.
+- **BR-019** O endereço (slug) da categoria é gerado a partir do nome na criação e não muda ao renomear, para não quebrar links já compartilhados. Nome repetido (mesmo endereço) é recusado.
+- **BR-019a** Excluir uma categoria não apaga produtos: eles ficam sem categoria. A tela avisa quantos produtos serão afetados antes de confirmar. A imagem da categoria na vitrine ainda vem de uma lista fixa por endereço; o envio de imagem pelo admin fica para depois do MVP atual.
+
 ## Opções e variações
 - **BR-020** Tipos de opção são configuráveis por produto; interface prioriza `color` e `size`.
 - **BR-021** Cada variação representa exatamente uma combinação válida dos valores exigidos pelas opções do produto.
