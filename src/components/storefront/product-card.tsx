@@ -35,7 +35,11 @@ export function ProductCard({ product, priority = false }: Props) {
         </div>
         <div className="p-3">
           <h3 className="line-clamp-2 min-h-10 text-label font-medium text-fg">{product.name}</h3>
-          <PriceDisplay cents={product.basePriceCents} className="mt-1 block text-label font-semibold text-fg" />
+          <PriceDisplay
+            cents={product.basePriceCents}
+            from={product.priceVaries}
+            className="mt-1 block text-label font-semibold text-fg"
+          />
         </div>
       </Link>
     </li>

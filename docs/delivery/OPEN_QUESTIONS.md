@@ -9,8 +9,8 @@
 | OQ-05 | ~~Papéis administrativos~~ **Resolvida (BR-005):** um único papel `admin`, criado fora do app. | RLS | — |
 | OQ-06 | ~~Exclusão definitiva?~~ **Resolvida (BR-015):** o admin pode excluir qualquer produto; arquivar continua disponível. | Integridade | — |
 | OQ-07 | ~~Limites por produto~~ **Resolvida (BR-017):** no máximo 2 opções, 20 valores e 100 variantes, validados no banco. | UX/performance | — |
-| OQ-08 | O visitante pode clicar no WhatsApp sem selecionar tamanho/cor? | UX | Exigir combinação válida |
-| OQ-09 | Produto esgotado aparece na listagem ou fica oculto? | Vitrine | Mostrar com selo indisponível |
+| OQ-08 | ~~O visitante pode clicar no WhatsApp sem selecionar tamanho/cor?~~ **Resolvida:** não; o botão só funciona com uma combinação válida e disponível escolhida (BR-041). | UX | — |
+| OQ-09 | ~~Produto esgotado aparece na listagem ou fica oculto?~~ **Resolvida:** aparece na listagem com o selo "Indisponível" (BR-027). | Vitrine | — |
 | OQ-10 | Busca por texto entra no MVP ou P1? | Escopo | P1 |
 | OQ-11 | Categoria pode ter subcategorias? | Banco/UI | Não no MVP |
 | OQ-12 | Quais dados de contato e identidade serão públicos? | Privacidade | Apenas os escolhidos pelo lojista |
